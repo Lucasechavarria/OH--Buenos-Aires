@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Mail, CheckCircle2, ArrowRight } from "lucide-react";
+import { Mail, CheckCircle2, ArrowRight, X } from "lucide-react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 export default function MarketingSplash() {
@@ -19,12 +19,21 @@ export default function MarketingSplash() {
   useEffect(() => {
     // Check if the user already subscribed
     const hasSubscribed = localStorage.getItem("oha_subscriber");
-    if (!hasSubscribed) {
+    const hasDismissed = sessionStorage.getItem("oha_dismissed");
+    
+    if (!hasSubscribed && !hasDismissed) {
       // Show splash after a small delay for better UX
       const timer = setTimeout(() => setShow(true), 1500);
       return () => clearTimeout(timer);
     }
   }, []);
+
+  const handleClose = () => {
+    setShow(false);
+    // Usamos sessionStorage para que vuelva a aparecer si recarga la página en una nueva sesión,
+    // pero no moleste mientras navega ahora.
+    sessionStorage.setItem("oha_dismissed", "true");
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -69,6 +78,15 @@ export default function MarketingSplash() {
   return (
     <div className="fixed inset-0 z-[9999] bg-onyx/95 backdrop-blur-xl flex items-center justify-center px-6 animate-fade-in overflow-y-auto pt-10 pb-10">
       <div className="max-w-xl w-full bg-onyx border border-gold-heritage/30 p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden text-center my-auto">
+        
+        {/* Botón Cerrar */}
+        <button 
+          onClick={handleClose}
+          className="absolute top-6 right-6 p-2 text-alabaster/40 hover:text-white transition-colors z-[20]"
+          aria-label="Cerrar"
+        >
+          <X className="w-6 h-6" />
+        </button>
         
         {/* Background glow */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-gold-heritage/20 blur-[80px] rounded-full pointer-events-none" />
