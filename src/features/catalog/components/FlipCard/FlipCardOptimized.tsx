@@ -73,7 +73,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
         whileHover={shouldReduceMotion ? {} : { y: -8 }}
         transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20 }}
       >
-        <div className="absolute inset-0 h-full w-full rounded-2xl border border-gold-heritage/30 bg-alabaster shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-gold-heritage group-hover:shadow-[0_25px_50px_-12px_rgba(200,165,100,0.45)] group-hover:ring-1 group-hover:ring-gold-heritage/50">
+        <div className="absolute inset-0 h-full w-full rounded-2xl border border-gold-heritage/30 bg-white shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-gold-heritage group-hover:shadow-[0_25px_50px_-12px_rgba(200,165,100,0.45)] group-hover:ring-1 group-hover:ring-gold-heritage/50">
           <div className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden rounded-2xl z-20">
             <div className="absolute top-0 -left-full h-full w-[200%] skew-x-[-30deg] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-transform duration-[3000ms] ease-out group-hover:translate-x-[150%] group-hover:opacity-90 mix-blend-overlay blur-[2px]" />
           </div>
