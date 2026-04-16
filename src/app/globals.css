@@ -6,17 +6,17 @@
  * Tipografía: Montserrat (Gotham/Futura Style)
  */
 :root {
-  /* Alabaster Neutral - Fondo limpo y ordenado */
-  --background: oklch(96% 0.01 10);
+  /* Onyx Sophistication - Fondo principal oscuro */
+  --background: oklch(12% 0.01 250);
   
-  /* Onyx Sophistication - El color de la autoridad */
-  --foreground: oklch(18% 0.01 250);
+  /* Alabaster Neutral - Texto claro */
+  --foreground: oklch(98% 0.005 250);
   
   /* Heritage Gold (Base) */
   --brand-accent: oklch(75% 0.12 85);
   
-  --brand-primary: var(--foreground);
-  --brand-surface: oklch(95% 0.005 250);
+  --brand-primary: var(--brand-accent);
+  --brand-surface: oklch(15% 0.01 250);
   
   /* High-Gloss Gold Gradient */
   --gold-gradient: linear-gradient(

@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function PromotionsPage() {
   return (
-    <main className="min-h-screen bg-alabaster selection:bg-gold-leaf selection:text-midnight-blue">
+    <main className="min-h-screen bg-background selection:bg-gold-leaf selection:text-midnight-blue">
       <Header />
       
       {/* Hero Refinado para la página de Promociones */}

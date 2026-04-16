@@ -31,7 +31,7 @@ export default function Home() {
       <Header />
       
       {/* Hero Section - Boutique Gold Experience */}
-      <section className="relative h-[85vh] flex items-center justify-center overflow-hidden bg-onyx">
+      <section className="relative h-[85vh] flex flex-col items-center justify-center pt-32 overflow-hidden bg-onyx">
         <div className="absolute inset-0 ornament-bg mix-blend-soft-light opacity-40 animate-pulse" style={{ animationDuration: '4s' }} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-onyx/40 to-onyx" />
         
@@ -72,8 +72,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
             <div className="max-w-xl">
-              <h2 className="text-5xl font-serif text-onyx mb-8 leading-tight">Nuestros Locales</h2>
-              <p className="text-onyx/60 text-base leading-loose font-medium">
+              <h2 className="text-5xl font-serif text-white mb-8 leading-tight">Nuestros Locales</h2>
+              <p className="text-alabaster/60 text-base leading-loose font-medium">
                 Descubrí la variedad de nuestras marcas y locales comerciales. Una experiencia completa diseñada para vos en el corazón de Buenos Aires.
               </p>
             </div>
@@ -85,7 +85,7 @@ export default function Home() {
             </a>
           </div>
 
-          <Suspense fallback={<div className="h-screen bg-alabaster" />}>
+          <Suspense fallback={<div className="h-screen bg-background" />}>
             <CatalogGrid />
           </Suspense>
         </div>
@@ -101,14 +101,14 @@ export default function Home() {
           <div className="h-16 w-16 rounded-full border border-gold-heritage/30 flex items-center justify-center mb-12 shadow-inner">
              <div className="h-3 w-3 rounded-full bg-gold-metallic animate-pulse" />
           </div>
-          <h4 className="text-4xl font-serif tracking-tight text-onyx mb-8">
+          <h4 className="text-4xl font-serif tracking-tight text-white mb-8">
             Visitanos en Recoleta
           </h4>
           <a 
             href="https://maps.app.goo.gl/8Z1QYSy1anWy5jY96" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="group flex flex-col sm:flex-row items-center justify-center gap-3 text-onyx/60 hover:text-gold-heritage transition-colors text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] sm:tracking-[0.6em] mb-12 font-sans relative"
+            className="group flex flex-col sm:flex-row items-center justify-center gap-3 text-alabaster/60 hover:text-gold-heritage transition-colors text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] sm:tracking-[0.6em] mb-12 font-sans relative"
           >
             <div className="bg-gold-heritage/10 p-2 rounded-full group-hover:bg-gold-heritage/20 transition-all duration-300">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
@@ -127,7 +127,7 @@ export default function Home() {
               <div className="h-14 w-14 rounded-full border border-gold-heritage/20 flex items-center justify-center group-hover:border-gold-heritage group-hover:bg-gold-metallic transition-all shadow-sm">
                 <InstagramIcon />
               </div>
-              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-onyx transition-colors">Instagram</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-alabaster/40 group-hover:text-white transition-colors">Instagram</span>
             </a>
 
             <a 
@@ -139,23 +139,23 @@ export default function Home() {
               <div className="h-14 w-14 rounded-full border border-gold-heritage/20 flex items-center justify-center group-hover:border-gold-heritage group-hover:bg-gold-metallic transition-all shadow-sm">
                 <LinkedinIcon />
               </div>
-              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-onyx transition-colors">LinkedIn</span>
+              <span className="text-[9px] font-bold uppercase tracking-[0.3em] text-alabaster/40 group-hover:text-white transition-colors">LinkedIn</span>
             </a>
           </div>
           
           {/* LDE-System Signature Block */}
-          <div className="w-full max-w-4xl pt-10 border-t border-onyx/5 flex justify-center">
+          <div className="w-full max-w-4xl pt-10 border-t border-white/5 flex justify-center">
              <a 
                href="https://lde-system.vercel.app/" 
                target="_blank" 
                rel="noopener noreferrer"
-               className="text-[9px] font-bold uppercase tracking-[0.4em] text-onyx/40 hover:text-onyx transition-all duration-300 font-sans group"
+               className="text-[9px] font-bold uppercase tracking-[0.4em] text-alabaster/40 hover:text-white transition-all duration-300 font-sans group"
              >
                Diseñado y Desarrollado por <span className="text-gold-heritage group-hover:text-gold-shine group-hover:drop-shadow-sm transition-all ml-1">LDE-System</span>
              </a>
           </div>
           
-          <p className="mt-6 text-onyx/50 text-[9px] font-normal tracking-[0.2em]">
+          <p className="mt-6 text-alabaster/50 text-[9px] font-normal tracking-[0.2em]">
             © 2026 OH! BUENOS AIRES EXPERIENCE. TODOS LOS DERECHOS RESERVADOS.
           </p>
         </div>
