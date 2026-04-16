@@ -1,0 +1,22 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import Providers from "./providers";
+
+export const metadata: Metadata = {
+  title: "Oh! Buenos Aires | Luxury Shopping",
+  description: "Descubrí el shopping y las marcas más exclusivas de Recoleta",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="es" suppressHydrationWarning>
+      <body className="antialiased">
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}

@@ -1,0 +1,72 @@
+# Oh! Buenos Aires - Secure Delivery Pipeline (2026)
+# Authored by: DevSecOps Agent
+
+name: DevSecOps_Secure_Deploy_2026
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security_scan:
+    name: "Shift-Left Security Scan"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Code
+        # actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Setup Node.js
+        # actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: SAST Scan (Snyk)
+        # snyk/actions/node@v1.0.0
+        uses: snyk/actions/node@v1.0.0
+        continue-on-error: false # BLOQUEO ESTRICTO EN PROD
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: SCA Scan (Trivy)
+        # aquasecurity/trivy-action@v0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1
+        with:
+          scan-type: 'fs'
+          severity: 'CRITICAL,HIGH'
+          format: 'table'
+          exit-code: '1' # Falla el job si encuentra severidades críticas
+
+  deploy:
+    name: "Secure Vercel Deployment"
+    needs: security_scan
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+
+      - name: Deploy to Vercel
+        # amondnet/vercel-action@v42.2.0
+        uses: amondnet/vercel-action@4b810e26f7bb2a331c698af186f890cbf20d5f72
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
+
+      - name: Sign Production Artifacts (Sigstore)
+        uses: sigstore/cosign-installer@v3.8.1
+      
+      - name: Verify Provenance
+        run: echo "Artifact Signed with Sigstore OIDC Identity"

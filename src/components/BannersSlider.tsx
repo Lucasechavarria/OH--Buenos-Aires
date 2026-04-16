@@ -1,0 +1,78 @@
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { motion } from "framer-motion";
+
+export default function BannersSlider() {
+  const [banners, setBanners] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      const { data } = await supabase
+        .from("banners")
+        .select("*")
+        .eq("active", true)
+        .order("created_at", { ascending: false });
+        
+      if (data && data.length > 0) {
+        setBanners(data);
+      }
+    };
+    fetchBanners();
+  }, []);
+
+  if (banners.length === 0) return null;
+
+  return (
+    <section className="w-full bg-onyx py-20 px-6 overflow-hidden border-t border-gold-heritage/10">
+      <div className="max-w-7xl mx-auto">
+        <header className="mb-12 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <h3 className="text-gold-heritage text-[10px] uppercase tracking-[0.5em] font-bold mb-3">Exclusivo</h3>
+            <h2 className="text-4xl font-serif text-white">Novedades & Eventos</h2>
+          </div>
+          <div className="hidden md:block h-[1px] flex-1 bg-gold-heritage/10 mx-10 mb-4" />
+        </header>
+
+        <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-10 scrollbar-hide">
+          {banners.map(banner => (
+            <motion.a 
+              key={banner.id} 
+              href={banner.link_url || '#'} 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative min-w-[85vw] md:min-w-[700px] h-[350px] md:h-[450px] rounded-[3rem] overflow-hidden snap-center group shadow-2xl flex-shrink-0 border border-white/5 block"
+            >
+              <img 
+                src={banner.image_url} 
+                alt={banner.title} 
+                className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105" 
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-onyx via-onyx/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700" />
+              
+              <div className="absolute bottom-10 left-10 right-10">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <h4 className="text-white font-serif text-3xl md:text-4xl mb-4 drop-shadow-xl leading-tight uppercase tracking-tight">
+                    {banner.title}
+                  </h4>
+                  {banner.link_url && (
+                    <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-heritage border-b border-gold-heritage/30 pb-1 group-hover:text-gold-shine group-hover:border-gold-shine transition-all">
+                      Descubrir más
+                    </div>
+                  )}
+                </motion.div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

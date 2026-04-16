@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@100;300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/**
+ * Oh! Buenos Aires - Brand Identity (2026)
+ * Tipografía: Montserrat (Gotham/Futura Style)
+ */
+:root {
+  /* Alabaster Neutral - Fondo limpo y ordenado */
+  --background: oklch(96% 0.01 10);
+  
+  /* Onyx Sophistication - El color de la autoridad */
+  --foreground: oklch(18% 0.01 250);
+  
+  /* Heritage Gold (Base) */
+  --brand-accent: oklch(75% 0.12 85);
+  
+  --brand-primary: var(--foreground);
+  --brand-surface: oklch(95% 0.005 250);
+  
+  /* High-Gloss Gold Gradient */
+  --gold-gradient: linear-gradient(
+    135deg, 
+    oklch(70% 0.12 85) 0%, 
+    oklch(80% 0.14 85) 30%, 
+    oklch(96% 0.16 90) 50%, 
+    oklch(80% 0.14 85) 70%, 
+    oklch(70% 0.12 85) 100%
+  );
+  
+  --rosa-viejo: oklch(96% 0.01 10);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: oklch(18% 0.01 250 / 0.1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-onyx: oklch(18% 0.01 250);
+  --color-gold-heritage: oklch(75% 0.12 85);
+  --color-alabaster: oklch(98% 0.005 250);
+  --color-rosa-viejo: var(--rosa-viejo);
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: oklch(12% 0.01 250);
+    --foreground: oklch(98% 0.005 250);
+    --brand-surface: oklch(15% 0.01 250);
+    --glass-bg: oklch(12% 0.01 250 / 0.9);
+    --glass-border: oklch(75% 0.12 85 / 0.2);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Títulos Geométricos (Estilo Gotham) */
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans, p, span, button {
+  font-family: var(--font-sans);
+}
+
+/* Refinamiento Gotham: Tracking Amplio para Vanguardia */
+.tracking-boutique {
+  letter-spacing: 0.2em;
+}
+
+.tracking-gotham {
+  letter-spacing: 0.15em;
+  font-weight: 500; /* Medium for better readability */
+}
+
+/** 
+ * Luxury Metallic Utils 
+ */
+.bg-gold-metallic {
+  background: var(--gold-gradient);
+  background-size: 200% 200%;
+}
+
+.shadow-gold-glow {
+  filter: drop-shadow(0 0 4px oklch(75% 0.12 85 / 0.4));
+}
+
+.text-gold-shine {
+  color: var(--brand-accent);
+  text-shadow: 0 0 2px oklch(96% 0.16 90 / 0.5);
+}
+
+.border-gold-shimmer {
+  border-color: oklch(75% 0.12 85 / 0.5);
+  box-shadow: inset 0 0 10px oklch(96% 0.16 90 / 0.1);
+}
+
+/* Golden Glide Animation */
+@keyframes golden-glide {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-golden-glide:hover {
+  animation: golden-glide 2s ease-in-out infinite;
+}
+
+/* Background Ornament */
+.ornament-bg {
+  background-image: radial-gradient(circle at 1.5px 1.5px, var(--brand-accent) 1px, transparent 0);
+  background-size: 100px 100px;
+  opacity: 0.15;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+::selection {
+  background: var(--brand-accent);
+  color: var(--background);
+}
+
+html {
+  scroll-behavior: smooth;
+}

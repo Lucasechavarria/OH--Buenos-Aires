@@ -1,0 +1,6 @@
+name: oh-buenos-aires-prod
+runtime: python
+description: Zero-Trust Infrastructure for Oh! Buenos Aires (2026)
+main: main.py
+backend:
+  url: https://api.pulumi.com

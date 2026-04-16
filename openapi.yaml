@@ -1,0 +1,144 @@
+openapi: 3.1.0
+info:
+  title: Oh! Buenos Aires - Shopping Experience API
+  description: API para la gestión de marcas, ubicaciones y promociones del shopping boutique Oh! Buenos Aires.
+  version: 1.0.0
+  contact:
+    name: Backend Engineering Team
+    email: backend@ohbuenosaires.com
+
+servers:
+  - url: https://api.ohbuenosaires.app/v1
+    description: Production Server
+
+paths:
+  /brands:
+    get:
+      summary: Listar todas las marcas
+      description: Retorna un listado de marcas con sus beneficios activos, optimizado para carga mobile.
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Listado exitoso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Brand'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /brands/{id}/promotions:
+    get:
+      summary: Obtener promociones de una marca
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Promociones encontradas
+        '404':
+          description: Marca no encontrada
+
+  /promotions/{id}:
+    patch:
+      summary: Actualizar estado de una promoción
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                active:
+                  type: boolean
+                title:
+                  type: string
+      responses:
+        '200':
+          description: Actualización exitosa
+        '401':
+          description: No autorizado
+        '403':
+          description: Prohibido (RBAC fail)
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Brand:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        logoUrl:
+          type: string
+        category:
+          type: string
+        location:
+          $ref: '#/components/schemas/Location'
+        activePromotion:
+          $ref: '#/components/schemas/Promotion'
+    
+    Location:
+      type: object
+      properties:
+        floor:
+          type: string
+        localNumber:
+          type: string
+
+    Promotion:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        active:
+          type: boolean
+
+  responses:
+    TooManyRequests:
+      description: Límite de peticiones excedido
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                example: 429
+              title:
+                type: string
+                example: Rate limit exceeded
