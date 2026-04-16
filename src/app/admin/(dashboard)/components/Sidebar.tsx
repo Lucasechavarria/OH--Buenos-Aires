@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { LogOut, Image as ImageIcon, Tag, Store, LayoutDashboard } from "lucide-react";
+import { LogOut, Image as ImageIcon, Tag, Store, LayoutDashboard, Mail } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/banners", label: "Banners", icon: ImageIcon },
   { href: "/admin/brands", label: "Marcas", icon: Store },
   { href: "/admin/promotions", label: "Promociones", icon: Tag },
+  { href: "/admin/subscribers", label: "Suscriptores", icon: Mail },
 ];
 
 export default function AdminSidebar() {
