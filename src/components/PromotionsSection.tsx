@@ -46,10 +46,10 @@ export default function PromotionsSection() {
   if (!promotions || promotions.length === 0) return null;
 
   return (
-    <section id="beneficios" className="py-20 px-6 bg-background relative overflow-hidden">
+    <section id="beneficios" className="py-20 px-6 bg-alabaster relative overflow-hidden">
       {/* Elementos Decorativos */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-gold-heritage/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
-      <div className="absolute bottom-0 left-0 w-64 h-64 bg-gold-heritage/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
+      <div className="absolute bottom-0 left-0 w-64 h-64 bg-rosa-viejo/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/2" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-20">
@@ -66,7 +66,7 @@ export default function PromotionsSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-5xl font-serif text-white mb-6"
+            className="text-4xl md:text-5xl font-serif text-onyx mb-6"
           >
             Promociones del Mes
           </motion.h2>
@@ -87,7 +87,7 @@ export default function PromotionsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="group bg-onyx/40 backdrop-blur-md rounded-3xl p-8 border border-gold-heritage/10 shadow-sm hover:shadow-2xl hover:border-gold-heritage/30 transition-all duration-500 flex flex-col justify-between h-full relative"
+              className="group bg-white rounded-3xl p-8 border border-gold-heritage/10 shadow-sm hover:shadow-2xl hover:border-gold-heritage/30 transition-all duration-500 flex flex-col justify-between h-full relative"
             >
               <div>
                 <div className="flex justify-between items-start mb-8">
@@ -106,10 +106,10 @@ export default function PromotionsSection() {
                 <h3 className="text-gold-heritage text-[11px] font-bold uppercase tracking-[0.3em] mb-3">
                   {promo.brand?.name}
                 </h3>
-                <h4 className="text-2xl font-serif text-white group-hover:text-gold-heritage transition-colors duration-500">
+                <h4 className="text-2xl font-serif text-onyx mb-4 group-hover:text-gold-heritage transition-colors duration-500">
                   {promo.title}
                 </h4>
-                <p className="text-alabaster/60 text-sm leading-relaxed mb-6 line-clamp-3 font-medium">
+                <p className="text-onyx/60 text-sm leading-relaxed mb-6 line-clamp-3 font-medium">
                   {promo.description}
                 </p>
               </div>
@@ -125,7 +125,7 @@ export default function PromotionsSection() {
                 <button
                   onClick={() => handleDownload(promo)}
                   disabled={generatingId === promo.id}
-                  className="w-full h-14 rounded-2xl bg-gold-metallic text-background text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:scale-105 transition-all duration-300 shadow-lg disabled:opacity-50 group/btn"
+                  className="w-full h-14 rounded-2xl bg-onyx text-alabaster text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-gold-heritage hover:text-white transition-all duration-300 shadow-lg shadow-onyx/5 disabled:opacity-50 group/btn"
                 >
                   <Ticket className={`w-4 h-4 ${generatingId === promo.id ? 'animate-spin' : 'group-hover/btn:rotate-12 transition-transform'}`} />
                   {generatingId === promo.id ? "Generando..." : "Descargar Cupón"}

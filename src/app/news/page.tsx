@@ -68,7 +68,7 @@ export default function NewsPage() {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   return (
-    <main className="min-h-screen bg-background selection:bg-gold-leaf selection:text-midnight-blue">
+    <main className="min-h-screen bg-alabaster selection:bg-gold-leaf selection:text-midnight-blue">
       <Header />
       
       {/* Hero Section */}
@@ -106,7 +106,7 @@ export default function NewsPage() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               onClick={() => setSelectedNews(news)}
-              className="group cursor-pointer bg-onyx/50 backdrop-blur-md rounded-3xl overflow-hidden border border-gold-heritage/10 hover:border-gold-heritage/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
+              className="group cursor-pointer bg-white rounded-3xl overflow-hidden border border-gold-heritage/10 hover:border-gold-heritage/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
             >
               <div className="relative h-72 md:h-80 w-full overflow-hidden">
                 <img 
@@ -121,10 +121,14 @@ export default function NewsPage() {
               </div>
 
               <div className="p-10 flex flex-col flex-1">
-                <h3 className="text-3xl font-serif text-white group-hover:text-gold-heritage transition-colors duration-500 leading-tight">
+                <div className="flex items-center gap-2 text-[10px] text-onyx/40 font-bold uppercase tracking-widest mb-4">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {news.date}
+                </div>
+                <h3 className="text-3xl font-serif text-onyx mb-4 group-hover:text-gold-heritage transition-colors duration-500 leading-tight">
                   {news.title}
                 </h3>
-                <p className="text-alabaster/60 text-sm leading-relaxed mb-8 flex-1">
+                <p className="text-onyx/60 text-sm leading-relaxed mb-8 flex-1">
                   {news.excerpt}
                 </p>
                 <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-gold-heritage group-hover:text-gold-shine">

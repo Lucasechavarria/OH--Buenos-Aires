@@ -83,10 +83,10 @@ export const CatalogGrid = () => {
 
         <section className="container mx-auto px-4 py-8">
           <div className="flex justify-between items-center mb-12">
-            <h2 className="text-sm uppercase tracking-[0.3em] text-alabaster/40 font-sans font-semibold">
+            <h2 className="text-sm uppercase tracking-[0.3em] text-onyx/40 font-sans font-semibold">
               Explorando {category !== "all" ? category : "Marcas"}
             </h2>
-            <span className="text-[10px] text-alabaster/20 uppercase tracking-widest">
+            <span className="text-[10px] text-onyx/20 uppercase tracking-widest">
               {filteredBrands.length} resultados encontrados
             </span>
           </div>

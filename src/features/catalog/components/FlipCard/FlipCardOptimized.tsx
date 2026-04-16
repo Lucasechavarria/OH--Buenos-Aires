@@ -73,7 +73,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
         whileHover={shouldReduceMotion ? {} : { y: -8 }}
         transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20 }}
       >
-        <div className="absolute inset-0 h-full w-full rounded-2xl border border-gold-heritage/30 bg-onyx/40 backdrop-blur-md shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-gold-heritage group-hover:shadow-[0_25px_50px_-12px_rgba(200,165,100,0.45)] group-hover:ring-1 group-hover:ring-gold-heritage/50">
+        <div className="absolute inset-0 h-full w-full rounded-2xl border border-gold-heritage/30 bg-alabaster shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-gold-heritage group-hover:shadow-[0_25px_50px_-12px_rgba(200,165,100,0.45)] group-hover:ring-1 group-hover:ring-gold-heritage/50">
           <div className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden rounded-2xl z-20">
             <div className="absolute top-0 -left-full h-full w-[200%] skew-x-[-30deg] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-transform duration-[3000ms] ease-out group-hover:translate-x-[150%] group-hover:opacity-90 mix-blend-overlay blur-[2px]" />
           </div>
@@ -85,9 +85,9 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
               <img
                 src={brand.logoUrl}
                 alt={`Logo de ${brand.name}`}
-                className={`max-h-56 max-w-full object-contain brightness-0 invert group-hover:invert-0 group-hover:brightness-100 transition-all duration-700 group-hover:scale-105 
+                className={`max-h-56 max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105 
                   ${brand.name.toLowerCase().includes('stella') || brand.name.toLowerCase().includes('smart') ? 'scale-[1.45]' : ''} 
-                  ${brand.name.toLowerCase().includes('smart') || brand.name.toLowerCase().includes('natura') ? 'drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]' : ''}`}
+                  ${brand.name.toLowerCase().includes('smart') || brand.name.toLowerCase().includes('natura') ? 'drop-shadow-[0_0_2px_rgba(0,0,0,0.5)]' : ''}`}
               />
             ) : (
               <div className="h-32 w-32 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-300 text-5xl font-serif">
@@ -151,7 +151,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
 
             {brand.activePromotions && brand.activePromotions.length > 0 && (
               <Button
-                className="w-full h-12 bg-gold-metallic hover:scale-105 transition-transform text-background font-bold tracking-[0.3em] text-[10px] uppercase border-none shadow-gold-glow font-sans flex items-center justify-center cursor-pointer disabled:opacity-50"
+                className="w-full h-12 bg-gold-metallic hover:scale-105 transition-transform text-white font-bold tracking-[0.3em] text-[10px] uppercase border-none shadow-gold-glow font-sans flex items-center justify-center cursor-pointer disabled:opacity-50"
                 onClick={handleDownloadCoupon}
                 disabled={isGenerating}
               >

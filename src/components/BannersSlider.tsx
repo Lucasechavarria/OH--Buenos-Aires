@@ -44,7 +44,7 @@ export default function BannersSlider() {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="relative min-w-[85vw] md:min-w-[700px] h-[350px] md:h-[450px] rounded-[3rem] overflow-hidden snap-center group shadow-2xl flex-shrink-0 border border-white/5 block"
+              className="relative min-w-[80vw] md:min-w-[500px] h-[250px] md:h-[350px] rounded-[2rem] md:rounded-[2.5rem] overflow-hidden snap-center group shadow-xl flex-shrink-0 border border-white/5 block"
             >
               <img 
                 src={banner.image_url} 
@@ -53,13 +53,13 @@ export default function BannersSlider() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-onyx via-onyx/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700" />
               
-              <div className="absolute bottom-10 left-10 right-10">
+              <div className="absolute bottom-6 left-6 right-6">
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <h4 className="text-white font-serif text-3xl md:text-4xl mb-4 drop-shadow-xl leading-tight uppercase tracking-tight">
+                  <h4 className="text-white font-serif text-2xl md:text-3xl mb-3 drop-shadow-xl leading-tight uppercase tracking-tight">
                     {banner.title}
                   </h4>
                   {banner.link_url && (
