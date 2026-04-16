@@ -9,6 +9,7 @@ export default function SubscribersAdmin() {
   const [subscribers, setSubscribers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterBirthday, setFilterBirthday] = useState(false);
 
   const fetchSubscribers = async () => {
     setLoading(true);
@@ -25,11 +26,21 @@ export default function SubscribersAdmin() {
     fetchSubscribers();
   }, []);
 
-  const filteredSubscribers = subscribers.filter(s => 
-    s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    s.last_name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredSubscribers = subscribers.filter(s => {
+    const matchesSearch = s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.first_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.last_name.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesBirthday = filterBirthday ? isBirthdayThisMonth(s.birth_date) : true;
+    
+    return matchesSearch && matchesBirthday;
+  });
+
+  const sendEmail = (email: string, firstName: string) => {
+    const subject = encodeURIComponent("¡Feliz Cumpleaños de parte de Oh! Buenos Aires!");
+    const body = encodeURIComponent(`Hola ${firstName},\n\n¡Queremos celebrar tu cumpleaños con un beneficio exclusivo! ...`);
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+  };
 
   const exportToCSV = () => {
     const headers = ["Nombre", "Apellido", "Email", "Telefono", "Fecha Nacimiento", "Suscrito En"];
@@ -70,16 +81,42 @@ export default function SubscribersAdmin() {
           <h2 className="text-3xl font-serif text-white mb-2">Suscriptores</h2>
           <p className="text-alabaster/60 font-sans text-sm">Gestiona la base de datos de marketing recolectada en el Splash inicial.</p>
         </div>
-        <button 
-          onClick={exportToCSV}
-          className="bg-gold-metallic text-onyx px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gold-shine transition-all shadow-lg shadow-gold-heritage/10"
-        >
-          <Download className="w-4 h-4" /> Exportar a CSV
-        </button>
+        <div className="flex gap-2">
+          <button 
+            onClick={exportToCSV}
+            className="bg-white/5 text-white border border-white/10 px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-white/10 transition-all"
+          >
+            <Download className="w-4 h-4" /> CSV
+          </button>
+        </div>
       </div>
 
-      <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-gold-heritage/20 shadow-xl mb-10">
-        <div className="relative">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Total Comunidad</p>
+          <p className="text-3xl font-serif text-white">{subscribers.length}</p>
+        </div>
+        <div className="bg-gold-heritage/10 border border-gold-heritage/20 p-6 rounded-2xl relative overflow-hidden">
+          <Cake className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-gold-heritage/10 rotate-12" />
+          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Cumpleaños del Mes</p>
+          <p className="text-3xl font-serif text-white">{subscribers.filter(s => isBirthdayThisMonth(s.birth_date)).length}</p>
+        </div>
+        <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
+          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Nuevos (Últ. 30 días)</p>
+          <p className="text-3xl font-serif text-white">
+            {subscribers.filter(s => {
+              const date = new Date(s.created_at);
+              const thirtyDaysAgo = new Date();
+              thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+              return date > thirtyDaysAgo;
+            }).length}
+          </p>
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 mb-10">
+        <div className="flex-1 relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-alabaster/40" />
           <input 
             type="text" 
@@ -89,6 +126,13 @@ export default function SubscribersAdmin() {
             className="w-full bg-onyx/50 border border-gold-heritage/20 rounded-xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-gold-heritage transition-all placeholder:text-alabaster/20"
           />
         </div>
+        <button
+          onClick={() => setFilterBirthday(!filterBirthday)}
+          className={`px-6 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all border ${filterBirthday ? 'bg-gold-heritage text-onyx border-gold-heritage' : 'bg-white/5 text-alabaster/60 border-white/10 hover:bg-white/10'}`}
+        >
+          <Cake className="w-4 h-4" />
+          {filterBirthday ? 'Viendo Cumpleañeros' : 'Filtrar Cumpleaños'}
+        </button>
       </div>
 
       <div className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
@@ -139,6 +183,16 @@ export default function SubscribersAdmin() {
                       </span>
                     )}
                   </div>
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button 
+                    onClick={() => sendEmail(s.email, s.first_name)}
+                    className="p-3 text-gold-heritage hover:bg-gold-heritage/10 rounded-full transition-all group/btn flex items-center gap-2 ml-auto"
+                    title="Enviar Email Directo"
+                  >
+                    <Mail className="w-4 h-4" />
+                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover/btn:opacity-100 transition-opacity whitespace-nowrap">Contactar</span>
+                  </button>
                 </td>
               </tr>
             ))}
