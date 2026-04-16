@@ -17,7 +17,7 @@ const LATEST_NEWS = [
 
 export default function LatestNewsSnippet() {
   return (
-    <section id="news" className="py-24 px-6 bg-white border-y border-onyx/5">
+    <section id="news" className="py-24 px-6 bg-background border-y border-onyx/5">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-xl">

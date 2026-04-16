@@ -38,22 +38,14 @@
   --color-foreground: var(--foreground);
   --color-onyx: oklch(18% 0.01 250);
   --color-gold-heritage: oklch(75% 0.12 85);
-  --color-alabaster: oklch(98% 0.005 250);
+  --color-alabaster: var(--rosa-viejo);
   --color-rosa-viejo: var(--rosa-viejo);
   
   --font-serif: "Playfair Display", serif;
   --font-sans: "Montserrat", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: oklch(12% 0.01 250);
-    --foreground: oklch(98% 0.005 250);
-    --brand-surface: oklch(15% 0.01 250);
-    --glass-bg: oklch(12% 0.01 250 / 0.9);
-    --glass-border: oklch(75% 0.12 85 / 0.2);
-  }
-}
+/* Forzamos el tema claro por diseño boutique, ignorando el esquema del sistema */
 
 body {
   background: var(--background);
