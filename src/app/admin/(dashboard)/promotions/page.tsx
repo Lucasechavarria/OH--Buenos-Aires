@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { Plus, Trash2, CheckCircle2, XCircle, Tag } from "lucide-react";
+import { Plus, Trash2, CheckCircle2, XCircle, Tag, Edit } from "lucide-react";
 
 export default function PromotionsAdmin() {
   const [promotions, setPromotions] = useState<any[]>([]);
@@ -11,6 +11,7 @@ export default function PromotionsAdmin() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   // Form State
   const [title, setTitle] = useState("");
@@ -97,6 +98,48 @@ export default function PromotionsAdmin() {
     }
   };
 
+  const startEdit = (promo: any) => {
+    setEditingId(promo.id);
+    setTitle(promo.title);
+    setDescription(promo.description || "");
+    setBrandId(promo.brand_id);
+    setValidFrom(promo.valid_from ? new Date(promo.valid_from).toISOString().slice(0, 16) : "");
+    setValidUntil(promo.valid_until ? new Date(promo.valid_until).toISOString().slice(0, 16) : "");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setTitle("");
+    setDescription("");
+    setBrandId("");
+    setValidFrom("");
+    setValidUntil("");
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId || !title || !brandId) return;
+
+    try {
+      const { error } = await supabase.from("promotions").update({
+        title,
+        description,
+        brand_id: brandId,
+        valid_from: validFrom || null,
+        valid_until: validUntil || null
+      }).eq("id", editingId);
+
+      if (error) throw error;
+
+      cancelEdit();
+      fetchData();
+      alert("Promoción actualizada con éxito");
+    } catch (err: any) {
+      alert("Error al actualizar: " + err.message);
+    }
+  };
+
   return (
     <div className="pb-20">
       <div className="flex items-center gap-4 mb-2">
@@ -110,8 +153,15 @@ export default function PromotionsAdmin() {
       </div>
 
       <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-gold-heritage/20 shadow-xl mb-12 mt-10">
-        <h3 className="font-bold text-xl mb-6 text-white font-serif">Crear Nueva Promoción</h3>
-        <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="font-bold text-xl text-white font-serif">{editingId ? "Editar Promoción" : "Crear Nueva Promoción"}</h3>
+          {editingId && (
+            <button onClick={cancelEdit} className="text-[10px] font-bold uppercase tracking-widest text-alabaster/40 hover:text-white transition-colors">
+              Cancelar Edición
+            </button>
+          )}
+        </div>
+        <form onSubmit={editingId ? handleUpdate : handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-4">
             <div>
               <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">Marca Asociada</label>
@@ -143,8 +193,8 @@ export default function PromotionsAdmin() {
             </div>
             
             <div className="flex-1 flex items-end">
-              <button type="submit" className="bg-gold-metallic text-onyx px-8 py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gold-shine transition-all shadow-lg shadow-gold-heritage/10 w-full md:w-fit mt-4">
-                <Plus className="w-5 h-5"/> Crear Promoción
+              <button type="submit" className={`px-8 py-4 rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-all shadow-lg w-full md:w-fit mt-4 ${editingId ? 'bg-emerald-500 text-onyx hover:bg-emerald-400' : 'bg-gold-metallic text-onyx hover:bg-gold-shine'}`}>
+                {editingId ? "Guardar Cambios" : <><Plus className="w-5 h-5"/> Crear Promoción</>}
               </button>
             </div>
           </div>
@@ -175,7 +225,14 @@ export default function PromotionsAdmin() {
               </div>
             </div>
             
-            <div className="flex flex-row sm:flex-col items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/5">
+            <div className="flex flex-row sm:flex-col items-center gap-3 w-full sm:w-auto mt-4 sm:mt-0 pt-4 sm:pt-0 border-t sm:border-t-0 border-white/5 shrink-0">
+              <button 
+                onClick={() => startEdit(p)}
+                className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest px-6 py-3 bg-white/5 text-white hover:bg-white/10 border border-white/10 rounded-xl transition-all"
+              >
+                <Edit className="w-4 h-4" /> Editar
+              </button>
+              
               <button 
                 onClick={() => toggleActive(p.id, p.active)}
                 className={`flex-1 sm:flex-none flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest px-6 py-3 rounded-xl transition-all ${p.active ? 'text-amber-400 bg-amber-400/10 hover:bg-amber-400/20 border border-amber-400/20' : 'text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20'}`}

@@ -12,7 +12,7 @@ export default function DashboardHome() {
         </div>
         
         <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-gold-heritage/20 shadow-xl transition-all hover:border-gold-heritage/40">
-          <h3 className="font-bold text-lg mb-2 text-white">Marcas (Boutiques)</h3>
+          <h3 className="font-bold text-lg mb-2 text-white">Marcas</h3>
           <p className="text-sm text-alabaster/60 mb-4">Añade o edita las tarjetas de las marcas del shopping.</p>
           <a href="/admin/brands" className="text-gold-metallic text-[10px] font-bold uppercase tracking-[0.2em] hover:text-gold-shine flex items-center gap-1">Gestionar &rarr;</a>
         </div>

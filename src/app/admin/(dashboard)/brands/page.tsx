@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { Plus, Trash2, Store } from "lucide-react";
+import { Plus, Trash2, Store, Edit } from "lucide-react";
 
 export default function BrandsAdmin() {
   const [brands, setBrands] = useState<any[]>([]);
@@ -17,6 +17,8 @@ export default function BrandsAdmin() {
   const [uploading, setUploading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingLocationId, setEditingLocationId] = useState<number | null>(null);
 
   const fetchBrands = async () => {
     setLoading(true);
@@ -124,14 +126,92 @@ export default function BrandsAdmin() {
     }
   };
 
+  const startEdit = (brand: any) => {
+    setEditingId(brand.id);
+    setEditingLocationId(brand.location_id);
+    setName(brand.name);
+    setPhone(brand.phone || "");
+    setFloor(brand.locations?.floor || "");
+    setLocalNumber(brand.locations?.local_number || "");
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditingLocationId(null);
+    setName("");
+    setPhone("");
+    setFloor("");
+    setLocalNumber("");
+    setFile(null);
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingId || !name) return;
+    setUploading(true);
+
+    try {
+      // 1. Update Location
+      if (editingLocationId) {
+        const { error: locError } = await supabase
+          .from("locations")
+          .update({ floor, local_number: localNumber })
+          .eq("id", editingLocationId);
+        if (locError) throw locError;
+      }
+
+      // 2. Upload Logo if new file
+      let logo_url = null;
+      if (file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('brand-logos')
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+        const { data: publicData } = supabase.storage.from('brand-logos').getPublicUrl(fileName);
+        logo_url = publicData.publicUrl;
+      }
+
+      // 3. Update Brand
+      const updateData: any = { name, phone };
+      if (logo_url) updateData.logo_url = logo_url;
+
+      const { error: brandError } = await supabase
+        .from("brands")
+        .update(updateData)
+        .eq("id", editingId);
+      
+      if (brandError) throw brandError;
+
+      cancelEdit();
+      fetchBrands();
+      alert("Marca actualizada con éxito");
+    } catch (err: any) {
+      console.error(err);
+      alert("Error al actualizar la marca: " + err.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-3xl font-serif text-white mb-2">Marcas</h2>
       <p className="text-alabaster/60 font-sans mb-8">Sube, edita o elimina las "Cards" de marcas del catálogo.</p>
 
       <div className="bg-white/5 backdrop-blur-md p-6 rounded-2xl border border-gold-heritage/20 shadow-xl mb-10">
-        <h3 className="font-bold text-lg mb-4 text-white">Añadir Marca</h3>
-        <form onSubmit={handleCreate} className="space-y-4 max-w-xl">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="font-bold text-lg text-white">{editingId ? "Editar Marca" : "Añadir Marca"}</h3>
+          {editingId && (
+            <button onClick={cancelEdit} className="text-[10px] font-bold uppercase tracking-widest text-alabaster/40 hover:text-white transition-colors">
+              Cancelar
+            </button>
+          )}
+        </div>
+        <form onSubmit={editingId ? handleUpdate : handleCreate} className="space-y-4 max-w-xl">
           <div>
             <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">Nombre Comercial</label>
             <input type="text" value={name} onChange={e => setName(e.target.value)} required className="w-full bg-onyx/50 border border-gold-heritage/20 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-gold-heritage transition-colors" />
@@ -154,8 +234,8 @@ export default function BrandsAdmin() {
             <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">Logo de la Boutique (Recomendado SVG o PNG sin fondo)</label>
             <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:uppercase file:tracking-widest file:font-semibold file:bg-gold-heritage/10 file:text-gold-heritage text-alabaster/60" />
           </div>
-          <button disabled={uploading} type="submit" className="bg-gold-metallic text-onyx px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-gold-shine transition-colors disabled:opacity-50 mt-4">
-            {uploading ? "Añadiendo..." : <><Plus className="w-4 h-4"/> Añadir Marca</>}
+          <button disabled={uploading} type="submit" className={`px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-colors disabled:opacity-50 mt-4 ${editingId ? 'bg-emerald-500 text-onyx' : 'bg-gold-metallic text-onyx hover:bg-gold-shine'}`}>
+            {uploading ? "Procesando..." : editingId ? "Guardar Cambios" : <><Plus className="w-4 h-4"/> Añadir Marca</>}
           </button>
         </form>
       </div>
@@ -187,19 +267,28 @@ export default function BrandsAdmin() {
                 {b.phone && <p className="text-[10px] text-alabaster/40">{b.phone}</p>}
               </div>
             </div>
-            <button 
-              onClick={() => handleDelete(b.id)} 
-              disabled={deletingId === b.id}
-              className={`px-4 py-2 rounded-xl transition-all duration-300 font-bold uppercase tracking-[0.1em] text-[10px] flex items-center gap-2 ${
-                deletingId === b.id 
-                  ? 'bg-white/10 text-alabaster/20' 
-                  : confirmId === b.id 
-                    ? 'bg-red-600 text-white shadow-lg shadow-red-900/40 ring-2 ring-red-400 animate-pulse' 
-                    : 'text-red-400 hover:bg-red-500/20 hover:text-red-300'
-              }`}
-            >
-              {confirmId === b.id ? "¿BORRAR?" : <Trash2 className={`w-5 h-5 ${deletingId === b.id ? 'animate-pulse' : ''}`} />}
-            </button>
+            <div className="flex flex-col gap-2 shrink-0">
+              <button 
+                onClick={() => startEdit(b)}
+                className="p-2 text-gold-heritage hover:bg-gold-heritage/10 rounded-lg transition-all"
+                title="Editar"
+              >
+                <Edit className="w-4 h-4" />
+              </button>
+              <button 
+                onClick={() => handleDelete(b.id)} 
+                disabled={deletingId === b.id}
+                className={`p-2 rounded-lg transition-all duration-300 flex items-center justify-center ${
+                  deletingId === b.id 
+                    ? 'text-alabaster/20' 
+                    : confirmId === b.id 
+                      ? 'bg-red-600 text-white animate-pulse' 
+                      : 'text-red-400 hover:bg-red-500/10'
+                }`}
+              >
+                {confirmId === b.id ? <span className="text-[8px] font-bold">¿?</span> : <Trash2 className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         ))}
         {!loading && brands.length === 0 && <p className="text-sm text-alabaster/40 py-10 col-span-full tracking-widest uppercase">No hay marcas registradas.</p>}

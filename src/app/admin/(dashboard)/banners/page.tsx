@@ -212,28 +212,28 @@ export default function BannersAdmin() {
       <div className="grid grid-cols-1 gap-6">
         <h3 className="text-alabaster/40 text-[10px] font-bold uppercase tracking-[0.3em]">Banners en Rotación</h3>
         {loading ? <p className="text-alabaster/60">Cargando banners...</p> : banners.map(b => (
-          <div key={b.id} className={`group flex flex-col md:flex-row items-center gap-6 p-6 rounded-3xl border transition-all backdrop-blur-md ${b.active ? 'bg-white/5 border-gold-heritage/30 shadow-2xl' : 'bg-onyx/40 border-onyx/20 opacity-60 grayscale'}`}>
-            <div className="relative w-full md:w-64 h-32 rounded-2xl overflow-hidden border border-white/10 shrink-0">
+          <div key={b.id} className={`group flex flex-col lg:flex-row items-center gap-6 p-6 rounded-3xl border transition-all backdrop-blur-md ${b.active ? 'bg-white/5 border-gold-heritage/30 shadow-2xl' : 'bg-onyx/40 border-onyx/20 opacity-60 grayscale'}`}>
+            <div className="relative w-full lg:w-64 h-40 md:h-48 lg:h-32 rounded-2xl overflow-hidden border border-white/10 shrink-0">
                <img src={b.image_url} alt={b.title} className="w-full h-full object-cover" />
                {!b.active && <div className="absolute inset-0 bg-onyx/60 flex items-center justify-center text-[10px] font-bold uppercase tracking-widest text-white">Inactivo</div>}
             </div>
 
-            <div className="flex-1 w-full text-center md:text-left">
+            <div className="flex-1 w-full text-center lg:text-left">
               <h4 className="font-bold text-xl text-white font-serif mb-2">{b.title}</h4>
-              <p className="text-alabaster/40 text-[10px] font-bold uppercase tracking-widest mb-4 truncate max-w-xs mx-auto md:mx-0">
+              <p className="text-alabaster/40 text-[10px] font-bold uppercase tracking-widest mb-4 truncate max-w-full">
                 {b.link_url || "Sin enlace de destino"}
               </p>
-              <div className="flex items-center justify-center md:justify-start gap-4">
+              <div className="flex items-center justify-center lg:justify-start gap-4">
                  <button onClick={() => toggleActive(b.id, b.active)} className={`flex items-center gap-2 text-[9px] font-bold uppercase tracking-widest px-4 py-2 rounded-full transition-all ${b.active ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20' : 'bg-amber-400/10 text-amber-400 border border-amber-400/20'}`}>
                     {b.active ? <><CheckCircle2 className="w-3 h-3" /> Activo</> : <><XCircle className="w-3 h-3" /> Suspendido</>}
                  </button>
               </div>
             </div>
             
-            <div className="flex flex-row md:flex-col items-center gap-3 w-full md:w-auto pt-4 md:pt-0 border-t md:border-t-0 border-white/5">
+            <div className="flex flex-row lg:flex-col items-stretch gap-3 w-full lg:w-40 pt-4 lg:pt-0 border-t lg:border-t-0 border-white/5 shrink-0">
               <button 
                 onClick={() => startEdit(b)}
-                className="flex-1 md:flex-none flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest px-6 py-3 bg-white/5 text-white hover:bg-white/10 border border-white/10 rounded-xl transition-all"
+                className="flex-1 lg:flex-none flex items-center justify-center gap-2 text-[10px] font-bold uppercase tracking-widest px-4 py-3 bg-white/5 text-white hover:bg-white/10 border border-white/10 rounded-xl transition-all"
               >
                 <Edit className="w-4 h-4" /> Editar
               </button>
@@ -241,7 +241,7 @@ export default function BannersAdmin() {
               <button 
                 onClick={() => handleDelete(b.id)} 
                 disabled={deletingId === b.id}
-                className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl transition-all duration-300 font-bold uppercase tracking-[0.1em] text-[10px] border ${
+                className={`flex-1 lg:flex-none flex items-center justify-center gap-2 px-4 py-3 rounded-xl transition-all duration-300 font-bold uppercase tracking-[0.1em] text-[10px] border ${
                   deletingId === b.id 
                     ? 'bg-white/5 text-white/20 border-white/5' 
                     : confirmId === b.id 
