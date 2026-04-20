@@ -20,6 +20,9 @@ export class SupabaseBrandRepository implements IBrandRepository {
         logo_url, 
         phone,
         categories (id, name, slug),
+        brand_categories (
+          categories (id, name, slug)
+        ),
         locations (id, floor, local_number),
         google_maps_url,
         promotions (id, title, active, image_url, valid_from, valid_until)
@@ -49,6 +52,7 @@ export class SupabaseBrandRepository implements IBrandRepository {
       logoUrl: b.logo_url,
       phone: b.phone,
       category: b.categories || undefined,
+      categories: b.brand_categories?.map((bc: any) => bc.categories).filter(Boolean) || [],
       location: b.locations ? {
         id: b.locations.id,
         floor: b.locations.floor,
@@ -88,6 +92,9 @@ export class SupabaseBrandRepository implements IBrandRepository {
       .select(`
         *,
         categories (*),
+        brand_categories (
+          categories (*)
+        ),
         locations (*),
         promotions (*)
       `)

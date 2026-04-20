@@ -35,6 +35,7 @@ export interface Brand {
   logoUrl?: string;
   phone?: string;
   category?: Category;
+  categories?: Category[];
   location?: Location;
   googleMapsUrl?: string;
   activePromotions?: Promotion[];

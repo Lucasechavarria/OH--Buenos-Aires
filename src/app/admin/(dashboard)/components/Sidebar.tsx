@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/banners", label: "Banners", icon: ImageIcon },
   { href: "/admin/brands", label: "Marcas", icon: Store },
+  { href: "/admin/categories", label: "Categorías", icon: Tag },
   { href: "/admin/promotions", label: "Promociones", icon: Tag },
   { href: "/admin/subscribers", label: "Suscriptores", icon: Mail },
 ];

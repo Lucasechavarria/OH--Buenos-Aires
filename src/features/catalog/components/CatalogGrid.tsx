@@ -61,7 +61,9 @@ export const CatalogGrid = () => {
 
   const filteredBrands = brands.filter((brand: Brand) => {
     const matchesSearch = brand.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = category === "all" || (brand.category && brand.category.slug.toLowerCase() === category.toLowerCase());
+    const matchesCategory = category === "all" || 
+      (brand.category && brand.category.slug.toLowerCase() === category.toLowerCase()) ||
+      (brand.categories && brand.categories.some(c => c.slug.toLowerCase() === category.toLowerCase()));
     return matchesSearch && matchesCategory;
   });
 

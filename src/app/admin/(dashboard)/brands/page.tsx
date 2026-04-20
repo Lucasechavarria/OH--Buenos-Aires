@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { Plus, Trash2, Store, Edit } from "lucide-react";
+import { Plus, Trash2, Store, Edit, Tag } from "lucide-react";
 
 export default function BrandsAdmin() {
   const [brands, setBrands] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Form State
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [floor, setFloor] = useState("");
@@ -22,13 +24,25 @@ export default function BrandsAdmin() {
 
   const fetchBrands = async () => {
     setLoading(true);
-    const { data } = await supabase.from("brands").select("*, locations(floor, local_number)").order("name", { ascending: true });
+    const { data } = await supabase
+      .from("brands")
+      .select("*, locations(floor, local_number), brand_categories(category_id)")
+      .order("name", { ascending: true });
     if (data) setBrands(data);
     setLoading(false);
   };
 
+  const fetchCategories = async () => {
+    const { data } = await supabase
+      .from("categories")
+      .select("*")
+      .order("name", { ascending: true });
+    if (data) setCategories(data);
+  };
+
   useEffect(() => {
     fetchBrands();
+    fetchCategories();
   }, []);
 
   const handleCreate = async (e: React.FormEvent) => {
@@ -61,23 +75,35 @@ export default function BrandsAdmin() {
 
       if (locError) throw locError;
 
-      const { error: insertError } = await supabase.from("brands").insert([
+      const { data: brandData, error: insertError } = await supabase.from("brands").insert([
         { 
           name, 
           phone: finalPhone, 
           logo_url, 
           google_maps_url: "https://maps.app.goo.gl/ohbuenosaires",
-          location_id: locData.id
+          location_id: locData.id,
+          category_id: selectedCategories.length > 0 ? selectedCategories[0] : null
         }
-      ]);
+      ]).select().single();
       
       if (insertError) throw insertError;
+      
+      // 3. Associate Categories
+      if (selectedCategories.length > 0 && brandData) {
+        const categoryEntries = selectedCategories.map(catId => ({
+          brand_id: brandData.id,
+          category_id: catId
+        }));
+        const { error: catError } = await supabase.from("brand_categories").insert(categoryEntries);
+        if (catError) throw catError;
+      }
       
       setName("");
       setPhone("");
       setFloor("");
       setLocalNumber("");
       setFile(null);
+      setSelectedCategories([]);
       fetchBrands();
     } catch (err: any) {
       console.error(err);
@@ -133,6 +159,8 @@ export default function BrandsAdmin() {
     setPhone(brand.phone || "");
     setFloor(brand.locations?.floor || "");
     setLocalNumber(brand.locations?.local_number || "");
+    const currentCats = brand.brand_categories?.map((bc: any) => bc.category_id) || [];
+    setSelectedCategories(currentCats);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -144,6 +172,7 @@ export default function BrandsAdmin() {
     setFloor("");
     setLocalNumber("");
     setFile(null);
+    setSelectedCategories([]);
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -176,7 +205,11 @@ export default function BrandsAdmin() {
       }
 
       // 3. Update Brand
-      const updateData: any = { name, phone };
+      const updateData: any = { 
+        name, 
+        phone,
+        category_id: selectedCategories.length > 0 ? selectedCategories[0] : null
+      };
       if (logo_url) updateData.logo_url = logo_url;
 
       const { error: brandError } = await supabase
@@ -185,6 +218,25 @@ export default function BrandsAdmin() {
         .eq("id", editingId);
       
       if (brandError) throw brandError;
+
+      // 4. Update Categories
+      // Delete old ones first
+      const { error: deleteCatsError } = await supabase
+        .from("brand_categories")
+        .delete()
+        .eq("brand_id", editingId);
+      
+      if (deleteCatsError) throw deleteCatsError;
+
+      // Insert new ones
+      if (selectedCategories.length > 0) {
+        const categoryEntries = selectedCategories.map(catId => ({
+          brand_id: editingId,
+          category_id: catId
+        }));
+        const { error: insertCatsError } = await supabase.from("brand_categories").insert(categoryEntries);
+        if (insertCatsError) throw insertCatsError;
+      }
 
       cancelEdit();
       fetchBrands();
@@ -234,6 +286,34 @@ export default function BrandsAdmin() {
             <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">Logo de la Boutique (Recomendado SVG o PNG sin fondo)</label>
             <input type="file" accept="image/*" onChange={e => setFile(e.target.files?.[0] || null)} className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-[10px] file:uppercase file:tracking-widest file:font-semibold file:bg-gold-heritage/10 file:text-gold-heritage text-alabaster/60" />
           </div>
+
+          <div>
+            <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Categorías / Filtros</label>
+            <div className="flex flex-wrap gap-2">
+              {categories.map(cat => {
+                const isSelected = selectedCategories.includes(cat.id);
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategories(prev => 
+                        isSelected ? prev.filter(id => id !== cat.id) : [...prev, cat.id]
+                      );
+                    }}
+                    className={`px-3 py-1.5 rounded-full text-[9px] uppercase tracking-wider font-bold transition-all border ${
+                      isSelected 
+                        ? 'bg-gold-heritage text-onyx border-gold-heritage' 
+                        : 'bg-transparent text-alabaster/40 border-white/10 hover:border-gold-heritage/40'
+                    }`}
+                  >
+                    {cat.name}
+                  </button>
+                );
+              })}
+            </div>
+            {categories.length === 0 && <p className="text-[10px] text-alabaster/20 italic">No hay categorías creadas. Ve a la sección de Categorías primero.</p>}
+          </div>
           <button disabled={uploading} type="submit" className={`px-6 py-3 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-2 transition-colors disabled:opacity-50 mt-4 ${editingId ? 'bg-emerald-500 text-onyx' : 'bg-gold-metallic text-onyx hover:bg-gold-shine'}`}>
             {uploading ? "Procesando..." : editingId ? "Guardar Cambios" : <><Plus className="w-4 h-4"/> Añadir Marca</>}
           </button>
@@ -265,6 +345,17 @@ export default function BrandsAdmin() {
               <div className="flex flex-col gap-0.5 mt-1">
                 {b.locations && <p className="text-[10px] text-gold-heritage uppercase tracking-wider font-bold">{b.locations.floor} • Local {b.locations.local_number}</p>}
                 {b.phone && <p className="text-[10px] text-alabaster/40">{b.phone}</p>}
+                
+                <div className="flex flex-wrap gap-1 mt-2">
+                  {b.brand_categories?.map((bc: any) => {
+                    const catName = categories.find(c => c.id === bc.category_id)?.name;
+                    return catName ? (
+                      <span key={bc.category_id} className="inline-flex items-center gap-1 text-[8px] bg-white/5 border border-white/10 rounded-md px-1.5 py-0.5 text-alabaster/60 italic">
+                        <Tag className="w-2 h-2 text-gold-heritage" /> {catName}
+                      </span>
+                    ) : null;
+                  })}
+                </div>
               </div>
             </div>
             <div className="flex flex-col gap-2 shrink-0">
