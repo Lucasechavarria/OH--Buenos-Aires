@@ -19,7 +19,6 @@ export class SupabaseBrandRepository implements IBrandRepository {
         name, 
         logo_url, 
         phone,
-        categories (id, name, slug),
         brand_categories (
           categories (id, name, slug)
         ),
@@ -51,7 +50,7 @@ export class SupabaseBrandRepository implements IBrandRepository {
       name: b.name,
       logoUrl: b.logo_url,
       phone: b.phone,
-      category: b.categories || undefined,
+      category: b.brand_categories?.[0]?.categories || undefined,
       categories: b.brand_categories?.map((bc: any) => bc.categories).filter(Boolean) || [],
       location: b.locations ? {
         id: b.locations.id,
@@ -90,8 +89,10 @@ export class SupabaseBrandRepository implements IBrandRepository {
     const { data, error } = await supabase
       .from("brands")
       .select(`
-        *,
-        categories (*),
+        id,
+        name,
+        logo_url,
+        phone,
         brand_categories (
           categories (*)
         ),
