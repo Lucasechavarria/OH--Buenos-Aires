@@ -77,7 +77,7 @@ export default function MarketingSplash() {
 
   return (
     <div className="fixed inset-0 z-[9999] bg-onyx/95 backdrop-blur-xl flex items-center justify-center px-6 animate-fade-in overflow-y-auto pt-10 pb-10">
-      <div className="max-w-xl w-full bg-onyx border border-gold-heritage/30 p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden text-center my-auto">
+      <div className="max-w-xl w-full bg-onyx border border-celeste-oh/30 p-8 sm:p-12 rounded-3xl shadow-2xl relative overflow-hidden text-center my-auto">
         
         {/* Botón Cerrar */}
         <button 
@@ -89,15 +89,15 @@ export default function MarketingSplash() {
         </button>
         
         {/* Background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-gold-heritage/20 blur-[80px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-celeste-oh/20 blur-[80px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 flex flex-col items-center">
-          <div className="h-14 w-14 mb-6 border border-gold-heritage/30 rounded-full flex items-center justify-center bg-onyx/80 backdrop-blur-md shadow-inner shadow-gold-heritage/10">
-            <Mail className="h-5 w-5 text-gold-metallic" />
+          <div className="h-14 w-14 mb-6 border border-celeste-oh/30 rounded-full flex items-center justify-center bg-onyx/80 backdrop-blur-md shadow-inner shadow-celeste-oh/10">
+            <Mail className="h-5 w-5 text-celeste-oh" />
           </div>
 
           <h2 className="text-3xl font-serif text-white mb-2">
-            Comunidad <span className="text-gold-heritage italic font-light">Exclusiva</span>
+            Comunidad <span className="text-celeste-oh italic font-light">Exclusiva</span>
           </h2>
           
           <p className="text-alabaster/60 text-sm font-sans mb-8 leading-relaxed">
@@ -116,7 +116,7 @@ export default function MarketingSplash() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-gold-heritage transition-colors placeholder:text-alabaster/20"
+                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20"
                     placeholder="Tu nombre"
                   />
                 </div>
@@ -128,7 +128,7 @@ export default function MarketingSplash() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-gold-heritage transition-colors placeholder:text-alabaster/20"
+                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20"
                     placeholder="Tu apellido"
                   />
                 </div>
@@ -143,7 +143,7 @@ export default function MarketingSplash() {
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-gold-heritage transition-colors placeholder:text-alabaster/20"
+                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20"
                     placeholder="+54 11 0000 0000"
                   />
                 </div>
@@ -155,7 +155,7 @@ export default function MarketingSplash() {
                     required
                     value={formData.birthDate}
                     onChange={handleChange}
-                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-gold-heritage transition-colors placeholder:text-alabaster/20 [color-scheme:dark]"
+                    className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20 [color-scheme:dark]"
                   />
                 </div>
               </div>
@@ -168,7 +168,7 @@ export default function MarketingSplash() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-gold-heritage transition-colors placeholder:text-alabaster/20"
+                  className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20"
                   placeholder="ejemplo@correo.com"
                 />
               </div>
@@ -176,7 +176,7 @@ export default function MarketingSplash() {
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-14 mt-6 bg-gold-metallic text-onyx font-bold uppercase tracking-[0.3em] text-[10px] rounded-xl flex items-center justify-center gap-3 hover:bg-gold-shine transition-colors disabled:opacity-70 group"
+                className="w-full h-14 mt-6 bg-brand-accent text-white font-bold uppercase tracking-[0.3em] text-[10px] rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-colors disabled:opacity-70 group"
               >
                 {isSubmitting ? (
                   <div className="h-4 w-4 rounded-full border-2 border-onyx/30 border-t-current animate-spin" />

@@ -68,7 +68,7 @@ export default function NewsPage() {
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
 
   return (
-    <main className="min-h-screen bg-alabaster selection:bg-gold-leaf selection:text-midnight-blue">
+    <main className="min-h-screen bg-alabaster selection:bg-celeste-oh selection:text-white">
       <Header />
       
       {/* Hero Section */}
@@ -77,7 +77,7 @@ export default function NewsPage() {
         <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left">
           <Link 
             href="/" 
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-heritage hover:text-gold-shine transition-all mb-12 group"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-celeste-oh hover:text-brand-accent transition-all mb-12 group"
           >
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Inicio
@@ -87,9 +87,9 @@ export default function NewsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-6xl md:text-8xl font-serif text-white mb-6"
           >
-            Oh! <span className="text-gold-heritage">News</span>
+            Oh! <span className="text-celeste-oh">News</span>
           </motion.h1>
-          <p className="max-w-2xl text-alabaster/40 text-sm md:text-md uppercase tracking-[0.4em] font-bold text-gold-shine">
+          <p className="max-w-2xl text-alabaster/40 text-sm md:text-md uppercase tracking-[0.4em] font-bold">
             Crónicas de estilo, novedades y exclusividad.
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function NewsPage() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
               onClick={() => setSelectedNews(news)}
-              className="group cursor-pointer bg-white rounded-3xl overflow-hidden border border-gold-heritage/10 hover:border-gold-heritage/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
+              className="group cursor-pointer bg-white rounded-3xl overflow-hidden border border-celeste-oh/10 hover:border-celeste-oh/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
             >
               <div className="relative h-72 md:h-80 w-full overflow-hidden">
                 <img 
@@ -114,8 +114,8 @@ export default function NewsPage() {
                   alt={news.title}
                   className="w-full h-full object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110"
                 />
-                <div className="absolute top-6 left-6 px-4 py-2 bg-onyx/80 backdrop-blur-md border border-gold-heritage/30 rounded-full flex items-center gap-2">
-                   <div className="text-gold-heritage">{news.icon}</div>
+                <div className="absolute top-6 left-6 px-4 py-2 bg-onyx/80 backdrop-blur-md border border-celeste-oh/30 rounded-full flex items-center gap-2">
+                   <div className="text-celeste-oh">{news.icon}</div>
                    <span className="text-[9px] font-bold text-white uppercase tracking-widest">{news.category}</span>
                 </div>
               </div>
@@ -125,13 +125,13 @@ export default function NewsPage() {
                   <Calendar className="w-3.5 h-3.5" />
                   {news.date}
                 </div>
-                <h3 className="text-3xl font-serif text-onyx mb-4 group-hover:text-gold-heritage transition-colors duration-500 leading-tight">
+                <h3 className="text-3xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors duration-500 leading-tight">
                   {news.title}
                 </h3>
                 <p className="text-onyx/60 text-sm leading-relaxed mb-8 flex-1">
                   {news.excerpt}
                 </p>
-                <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-gold-heritage group-hover:text-gold-shine">
+                <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-celeste-oh">
                   <span>Leer Crónica</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
                 </div>
@@ -160,7 +160,7 @@ export default function NewsPage() {
             >
               <button 
                 onClick={() => setSelectedNews(null)}
-                className="absolute top-6 right-6 z-10 p-3 bg-onyx text-white rounded-full hover:bg-gold-heritage transition-colors shadow-xl"
+                className="absolute top-6 right-6 z-10 p-3 bg-onyx text-white rounded-full hover:bg-brand-accent transition-colors shadow-xl"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -171,8 +171,8 @@ export default function NewsPage() {
               </div>
 
               <div className="p-8 md:p-16 -mt-20 relative bg-white rounded-t-[3rem]">
-                <div className="flex items-center gap-3 text-[11px] text-gold-heritage font-bold uppercase tracking-[0.3em] mb-6">
-                   <div className="p-2 rounded-full bg-gold-heritage/10">{selectedNews.icon}</div>
+                <div className="flex items-center gap-3 text-[11px] text-celeste-oh font-bold uppercase tracking-[0.3em] mb-6">
+                   <div className="p-2 rounded-full bg-celeste-oh/10">{selectedNews.icon}</div>
                    <span>{selectedNews.category} • {selectedNews.date}</span>
                 </div>
                 
@@ -187,7 +187,7 @@ export default function NewsPage() {
 
                 <div className="mt-16 pt-10 border-t border-onyx/5 flex flex-col md:flex-row items-center justify-between gap-6">
                    <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-onyx/40">Visítanos en Oh! Buenos Aires</p>
-                   <Link href="/#boutiques" onClick={() => setSelectedNews(null)} className="h-14 px-10 flex items-center justify-center bg-gold-metallic text-onyx text-[10px] font-bold uppercase tracking-[0.4em] rounded-full hover:bg-gold-shine transition-all">
+                   <Link href="/#boutiques" onClick={() => setSelectedNews(null)} className="h-14 px-10 flex items-center justify-center bg-brand-accent text-white text-[10px] font-bold uppercase tracking-[0.4em] rounded-full hover:opacity-90 transition-all">
                       Explorar Locales
                    </Link>
                 </div>

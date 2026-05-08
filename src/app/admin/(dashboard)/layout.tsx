@@ -16,10 +16,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-onyx text-alabaster selection:bg-gold-leaf selection:text-midnight-blue">
+    <div className="flex h-screen overflow-hidden bg-onyx text-alabaster selection:bg-celeste-oh selection:text-white">
       <AdminSidebar />
-      <main className="flex-1 overflow-y-auto bg-onyx relative border-l border-gold-heritage/10">
-        <div className="absolute inset-0 bg-gradient-to-br from-gold-heritage/5 via-transparent to-transparent opacity-30 pointer-events-none" />
+      <main className="flex-1 overflow-y-auto bg-onyx relative border-l border-celeste-oh/10">
+        <div className="absolute inset-0 bg-gradient-to-br from-celeste-oh/5 via-transparent to-transparent opacity-30 pointer-events-none" />
         <div className="p-8 md:p-12 max-w-7xl mx-auto min-h-full relative z-10">
           {children}
         </div>

@@ -26,14 +26,14 @@ export default function BannersSlider() {
   if (banners.length === 0) return null;
 
   return (
-    <section className="w-full bg-onyx py-20 px-6 overflow-hidden border-t border-gold-heritage/10">
+    <section className="w-full bg-onyx py-20 px-6 overflow-hidden border-t border-celeste-oh/10">
       <div className="max-w-7xl mx-auto">
         <header className="mb-12 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <h3 className="text-gold-heritage text-[10px] uppercase tracking-[0.5em] font-bold mb-3">Exclusivo</h3>
+            <h3 className="text-celeste-oh text-[10px] uppercase tracking-[0.5em] font-bold mb-3">Exclusivo</h3>
             <h2 className="text-4xl font-serif text-white">Novedades & Eventos</h2>
           </div>
-          <div className="hidden md:block h-[1px] flex-1 bg-gold-heritage/10 mx-10 mb-4" />
+          <div className="hidden md:block h-[1px] flex-1 bg-celeste-oh/10 mx-10 mb-4" />
         </header>
 
         <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-10 scrollbar-hide">
@@ -63,7 +63,7 @@ export default function BannersSlider() {
                     {banner.title}
                   </h4>
                   {banner.link_url && (
-                    <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-heritage border-b border-gold-heritage/30 pb-1 group-hover:text-gold-shine group-hover:border-gold-shine transition-all">
+                    <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-celeste-oh border-b border-celeste-oh/30 pb-1 group-hover:opacity-80 group-hover:border-celeste-oh transition-all">
                       Descubrir más
                     </div>
                   )}

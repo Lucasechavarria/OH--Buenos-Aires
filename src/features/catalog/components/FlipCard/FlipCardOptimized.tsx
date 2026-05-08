@@ -57,7 +57,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
 
   return (
     <div
-      className="group h-[400px] w-full perspective-1000 cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-gold-heritage/30 rounded-2xl relative"
+      className="group h-[400px] w-full perspective-1000 cursor-pointer outline-none focus-visible:ring-4 focus-visible:ring-celeste-oh/30 rounded-2xl relative"
       onClick={handleFlip}
       onKeyDown={onKeyDown}
       tabIndex={0}
@@ -65,7 +65,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
       aria-expanded={isFlipped}
       aria-label={`Local ${brand.name}. Pulsa para más información.`}
     >
-      <div className="absolute inset-0 bg-gold-heritage/50 blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-[1500ms] pointer-events-none rounded-[3rem] translate-y-6 scale-90 z-0" />
+      <div className="absolute inset-0 bg-celeste-oh/20 blur-[50px] opacity-0 group-hover:opacity-100 transition-opacity duration-[1500ms] pointer-events-none rounded-[3rem] translate-y-6 scale-90 z-0" />
 
       <motion.div
         className="relative h-full w-full preserve-3d z-10"
@@ -73,7 +73,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
         whileHover={shouldReduceMotion ? {} : { y: -8 }}
         transition={shouldReduceMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 20 }}
       >
-        <div className="absolute inset-0 h-full w-full rounded-2xl border border-gold-heritage/30 bg-white shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-gold-heritage group-hover:shadow-[0_25px_50px_-12px_rgba(200,165,100,0.45)] group-hover:ring-1 group-hover:ring-gold-heritage/50">
+        <div className="absolute inset-0 h-full w-full rounded-2xl border border-celeste-oh/30 bg-white shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-between p-8 transition-all duration-700 group-hover:border-celeste-oh group-hover:shadow-[0_25px_50px_-12px_rgba(100,180,200,0.25)] group-hover:ring-1 group-hover:ring-celeste-oh/50">
           <div className="pointer-events-none absolute inset-0 h-full w-full overflow-hidden rounded-2xl z-20">
             <div className="absolute top-0 -left-full h-full w-[200%] skew-x-[-30deg] bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-transform duration-[3000ms] ease-out group-hover:translate-x-[150%] group-hover:opacity-90 mix-blend-overlay blur-[2px]" />
           </div>
@@ -96,20 +96,20 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
             )}
           </div>
 
-          <div className="flex-none pb-2 text-center w-full border-t border-gold-heritage/10 pt-4 mt-4">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-gold-heritage font-bold text-gold-shine font-sans">
+          <div className="flex-none pb-2 text-center w-full border-t border-celeste-oh/10 pt-4 mt-4">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-celeste-oh font-bold font-sans">
               {brand.category?.name || "Local"}
             </p>
           </div>
         </div>
 
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-onyx p-8 backface-hidden rotate-y-180 flex flex-col justify-between text-alabaster shadow-2xl border border-gold-heritage/30">
+        <div className="absolute inset-0 h-full w-full rounded-2xl bg-onyx p-8 backface-hidden rotate-y-180 flex flex-col justify-between text-alabaster shadow-2xl border border-celeste-oh/30">
           <div className="space-y-6">
             <div className="flex justify-between items-start">
               <div>
-                <h3 className="text-2xl font-serif text-gold-heritage mb-2">{brand.name}</h3>
+                <h3 className="text-2xl font-serif text-celeste-oh mb-2">{brand.name}</h3>
                 <div className="flex items-center gap-1.5 text-[10px] text-alabaster/60 font-sans tracking-widest uppercase">
-                  <MapPin className="h-3 w-3 text-gold-heritage/70" />
+                  <MapPin className="h-3 w-3 text-celeste-oh/70" />
                   <span>PISO {brand.location?.floor} • LOCAL {brand.location?.localNumber}</span>
                 </div>
               </div>
@@ -117,14 +117,14 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
             
             <div className="space-y-3 pt-2">
               <div className="flex items-center gap-3 text-[10px] text-alabaster/80 tracking-widest font-sans uppercase">
-                 <Clock className="h-3.5 w-3.5 text-gold-heritage" />
+                 <Clock className="h-3.5 w-3.5 text-celeste-oh" />
                  <span>LUN - DOM | 10:00 A 22:00</span>
               </div>
               
               {/* Información de la promoción actual */}
               {brand.activePromotions?.[0] && (
-                <div className="mt-4 p-3 rounded-xl bg-gold-heritage/5 border border-gold-heritage/20">
-                  <p className="text-xs font-bold text-gold-heritage uppercase tracking-wider mb-1 line-clamp-1">
+                <div className="mt-4 p-3 rounded-xl bg-celeste-oh/5 border border-celeste-oh/20">
+                  <p className="text-xs font-bold text-celeste-oh uppercase tracking-wider mb-1 line-clamp-1">
                     {brand.activePromotions[0].title}
                   </p>
                   {brand.activePromotions[0].validUntil && (
@@ -151,7 +151,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
 
             {brand.activePromotions && brand.activePromotions.length > 0 && (
               <Button
-                className="w-full h-12 bg-gold-metallic hover:scale-105 transition-transform text-white font-bold tracking-[0.3em] text-[10px] uppercase border-none shadow-gold-glow font-sans flex items-center justify-center cursor-pointer disabled:opacity-50"
+                className="w-full h-12 bg-brand-accent hover:scale-105 transition-transform text-white font-bold tracking-[0.3em] text-[10px] uppercase border-none font-sans flex items-center justify-center cursor-pointer disabled:opacity-50"
                 onClick={handleDownloadCoupon}
                 disabled={isGenerating}
               >

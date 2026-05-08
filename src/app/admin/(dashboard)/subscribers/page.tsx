@@ -94,16 +94,16 @@ export default function SubscribersAdmin() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
-          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Total Comunidad</p>
+          <p className="text-[10px] uppercase tracking-widest text-celeste-oh font-bold mb-1">Total Comunidad</p>
           <p className="text-3xl font-serif text-white">{subscribers.length}</p>
         </div>
-        <div className="bg-gold-heritage/10 border border-gold-heritage/20 p-6 rounded-2xl relative overflow-hidden">
-          <Cake className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-gold-heritage/10 rotate-12" />
-          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Cumpleaños del Mes</p>
+        <div className="bg-celeste-oh/10 border border-celeste-oh/20 p-6 rounded-2xl relative overflow-hidden">
+          <Cake className="absolute right-[-10px] bottom-[-10px] w-24 h-24 text-celeste-oh/10 rotate-12" />
+          <p className="text-[10px] uppercase tracking-widest text-celeste-oh font-bold mb-1">Cumpleaños del Mes</p>
           <p className="text-3xl font-serif text-white">{subscribers.filter(s => isBirthdayThisMonth(s.birth_date)).length}</p>
         </div>
         <div className="bg-white/5 border border-white/10 p-6 rounded-2xl">
-          <p className="text-[10px] uppercase tracking-widest text-gold-heritage font-bold mb-1">Nuevos (Últ. 30 días)</p>
+          <p className="text-[10px] uppercase tracking-widest text-celeste-oh font-bold mb-1">Nuevos (Últ. 30 días)</p>
           <p className="text-3xl font-serif text-white">
             {subscribers.filter(s => {
               const date = new Date(s.created_at);
@@ -123,12 +123,12 @@ export default function SubscribersAdmin() {
             placeholder="Buscar por nombre o email..." 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-onyx/50 border border-gold-heritage/20 rounded-xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-gold-heritage transition-all placeholder:text-alabaster/20"
+            className="w-full bg-onyx/50 border border-celeste-oh/20 rounded-xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-celeste-oh transition-all placeholder:text-alabaster/20"
           />
         </div>
         <button
           onClick={() => setFilterBirthday(!filterBirthday)}
-          className={`px-6 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all border ${filterBirthday ? 'bg-gold-heritage text-onyx border-gold-heritage' : 'bg-white/5 text-alabaster/60 border-white/10 hover:bg-white/10'}`}
+          className={`px-6 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all border ${filterBirthday ? 'bg-celeste-oh text-white border-celeste-oh' : 'bg-white/5 text-alabaster/60 border-white/10 hover:bg-white/10'}`}
         >
           <Cake className="w-4 h-4" />
           {filterBirthday ? 'Viendo Cumpleañeros' : 'Filtrar Cumpleaños'}
@@ -138,7 +138,7 @@ export default function SubscribersAdmin() {
       <div className="overflow-x-auto rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md">
         <table className="w-full text-left font-sans text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-[10px] uppercase tracking-widest text-gold-heritage font-bold">
+            <tr className="border-b border-white/10 text-[10px] uppercase tracking-widest text-celeste-oh font-bold">
               <th className="px-6 py-5">Suscrito</th>
               <th className="px-6 py-5">Nombre Completo</th>
               <th className="px-6 py-5">Email</th>
@@ -161,20 +161,20 @@ export default function SubscribersAdmin() {
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 text-alabaster/60 group-hover:text-white transition-colors">
-                    <Mail className="w-3.5 h-3.5 text-gold-heritage/40" />
+                    <Mail className="w-3.5 h-3.5 text-celeste-oh/40" />
                     {s.email}
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-2 text-alabaster/60">
-                    <Phone className="w-3.5 h-3.5 text-gold-heritage/40" />
+                    <Phone className="w-3.5 h-3.5 text-celeste-oh/40" />
                     {s.phone}
                   </div>
                 </td>
                 <td className="px-6 py-4">
                   <div className="flex flex-col items-center gap-1">
                     <div className="flex items-center gap-2 text-[11px] text-alabaster/60">
-                      <Calendar className="w-3.5 h-3.5 text-gold-heritage/40" />
+                      <Calendar className="w-3.5 h-3.5 text-celeste-oh/40" />
                       {s.birth_date}
                     </div>
                     {isBirthdayThisMonth(s.birth_date) && (
@@ -187,7 +187,7 @@ export default function SubscribersAdmin() {
                 <td className="px-6 py-4 text-right">
                   <button 
                     onClick={() => sendEmail(s.email, s.first_name)}
-                    className="p-3 text-gold-heritage hover:bg-gold-heritage/10 rounded-full transition-all group/btn flex items-center gap-2 ml-auto"
+                    className="p-3 text-celeste-oh hover:bg-celeste-oh/10 rounded-full transition-all group/btn flex items-center gap-2 ml-auto"
                     title="Enviar Email Directo"
                   >
                     <Mail className="w-4 h-4" />
@@ -201,16 +201,16 @@ export default function SubscribersAdmin() {
       </div>
 
       <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="p-6 bg-gold-heritage/5 border border-gold-heritage/10 rounded-2xl">
-          <h4 className="flex items-center gap-2 text-gold-heritage text-[10px] font-bold uppercase tracking-widest mb-4">
+        <div className="p-6 bg-celeste-oh/5 border border-celeste-oh/10 rounded-2xl">
+          <h4 className="flex items-center gap-2 text-celeste-oh text-[10px] font-bold uppercase tracking-widest mb-4">
             <Mail className="w-4 h-4" /> Marketing Automation
           </h4>
           <p className="text-sm text-alabaster/60 leading-relaxed">
             Puedes exportar la lista a CSV e importarla en herramientas como <strong>Mailchimp, Klaviyo o Sendinblue</strong> para enviar campañas personalizadas de email o SMS a tus clientes.
           </p>
         </div>
-        <div className="p-6 bg-gold-heritage/5 border border-gold-heritage/10 rounded-2xl">
-          <h4 className="flex items-center gap-2 text-gold-heritage text-[10px] font-bold uppercase tracking-widest mb-4">
+        <div className="p-6 bg-celeste-oh/5 border border-celeste-oh/10 rounded-2xl">
+          <h4 className="flex items-center gap-2 text-celeste-oh text-[10px] font-bold uppercase tracking-widest mb-4">
             <Cake className="w-4 h-4" /> Fidelización por Cumpleaños
           </h4>
           <p className="text-sm text-alabaster/60 leading-relaxed">

@@ -71,7 +71,7 @@ export const CatalogGrid = () => {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="h-12 w-12 border-t-2 border-gold-heritage rounded-full animate-spin mb-4" />
+          <div className="h-12 w-12 border-t-2 border-celeste-oh rounded-full animate-spin mb-4" />
           <p className="text-[10px] uppercase tracking-[0.3em] text-onyx/40">Cargando catálogo...</p>
         </div>
       </div>

@@ -3,6 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import * as motion from "framer-motion/client";
 import { MessageCircle, X, Send, User, Bot } from "lucide-react";
+import { getBotResponse } from "@/src/lib/chatbotLogic";
+import { useQuery } from "@tanstack/react-query";
+import { getBrands } from "@/src/features/catalog/services/brandService";
+import { getActivePromotions } from "@/src/features/catalog/services/promotionService";
+import { getEvents } from "@/src/features/catalog/services/agendaService";
+import { usePathname } from "next/navigation";
 
 interface Message {
   id: string;
@@ -13,10 +19,34 @@ interface Message {
 
 export default function CustomerServiceChatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
+  const { data: brands = [] } = useQuery({
+    queryKey: ['brands'],
+    queryFn: getBrands,
+    staleTime: 1000 * 60 * 10,
+  });
+
+  const { data: promotions = [] } = useQuery({
+    queryKey: ['promotions-active'],
+    queryFn: getActivePromotions,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const { data: events = [] } = useQuery({
+    queryKey: ['events'],
+    queryFn: getEvents,
+    staleTime: 1000 * 60 * 15,
+  });
+
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Bienvenido a OH! Buenos Aires. Soy tu asistente de Luxury Shopping. ¿En qué puedo ayudarte hoy?",
+      text: pathname.includes("/gastronomia") 
+        ? "¡Hola! Bienvenido al sector Gastronómico de OH!. ¿Buscás alguna mesa en especial o querés ver las opciones de hoy?"
+        : pathname.includes("/marcas")
+        ? "¡Hola! Estoy aquí para ayudarte a encontrar tus marcas favoritas. ¿Buscás alguna en particular?"
+        : "Bienvenido a OH! Buenos Aires. Soy tu asistente de Luxury Shopping. ¿En qué puedo ayudarte hoy?",
       sender: "bot",
       timestamp: new Date(),
     },
@@ -34,6 +64,29 @@ export default function CustomerServiceChatbot() {
     }
   }, [messages, isOpen]);
 
+  const formatText = (text: string) => {
+    // Basic markdown link parsing [text](url)
+    const parts = text.split(/(\[.*?\]\(.*?\))/g);
+    return parts.map((part, i) => {
+      const match = part.match(/\[(.*?)\]\((.*?)\)/);
+      if (match) {
+        const isMailto = match[2].startsWith("mailto:");
+        return (
+          <a 
+            key={i} 
+            href={match[2]} 
+            target={isMailto ? undefined : "_blank"} 
+            rel={isMailto ? undefined : "noopener noreferrer"}
+            className="text-celeste-oh underline font-bold hover:text-brand-accent transition-colors"
+          >
+            {match[1]}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   const handleSend = () => {
     if (!inputValue.trim()) return;
 
@@ -47,16 +100,22 @@ export default function CustomerServiceChatbot() {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
 
-    // Simulate bot response
+    // Use smart bot response
     setTimeout(() => {
+      const botResponse = getBotResponse(userMessage.text, { 
+        brands, 
+        promotions, 
+        events, 
+        pathname 
+      });
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Gracias por tu consulta. Un asesor de nuestro equipo de Concierge se pondrá en contacto con vos a la brevedad, o podés visitar nuestra sección de Boutiques para más información.",
+        text: botResponse,
         sender: "bot",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMessage]);
-    }, 1500);
+    }, 800);
   };
 
   return (
@@ -68,7 +127,7 @@ export default function CustomerServiceChatbot() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-8 right-8 z-50 h-16 w-16 bg-gold-metallic text-onyx rounded-full shadow-2xl flex items-center justify-center border border-white/20 transition-all duration-300 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : ''}`}
+        className={`fixed bottom-8 right-8 z-50 h-16 w-16 bg-brand-accent text-white rounded-full shadow-2xl flex items-center justify-center border border-white/20 transition-all duration-300 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : ''}`}
       >
         <MessageCircle className="h-7 w-7" />
         <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full border-2 border-onyx animate-pulse" />
@@ -82,9 +141,9 @@ export default function CustomerServiceChatbot() {
         className={`fixed bottom-8 right-8 z-50 w-[95vw] sm:w-[400px] h-[580px] bg-white rounded-[32px] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col border border-onyx/5 font-sans ${!isOpen && 'pointer-events-none'}`}
       >
         {/* Header */}
-        <div className="bg-onyx p-6 flex justify-between items-center border-b border-gold-heritage/20">
+        <div className="bg-onyx p-6 flex justify-between items-center border-b border-celeste-oh/20">
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-gold-heritage to-gold-shine flex items-center justify-center shadow-lg">
+            <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-celeste-oh to-celeste-soft flex items-center justify-center shadow-lg">
               <Bot className="text-onyx h-6 w-6" />
             </div>
             <div>
@@ -119,7 +178,7 @@ export default function CustomerServiceChatbot() {
                     : "bg-white text-onyx/80 border border-onyx/5 rounded-tl-none"
                 }`}
               >
-                {msg.text}
+                {formatText(msg.text)}
                 <div className={`text-[9px] mt-2 opacity-40 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
                   {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </div>
@@ -138,12 +197,12 @@ export default function CustomerServiceChatbot() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
               placeholder="Escribí tu mensaje..."
-              className="flex-1 bg-alabaster border-none rounded-full py-4 px-6 text-sm focus:outline-none focus:ring-2 focus:ring-gold-heritage/30 transition-all placeholder:text-onyx/30"
+              className="flex-1 bg-alabaster border-none rounded-full py-4 px-6 text-sm focus:outline-none focus:ring-2 focus:ring-celeste-oh/30 transition-all placeholder:text-onyx/30"
             />
             <button
               onClick={handleSend}
               disabled={!inputValue.trim()}
-              className="h-12 w-12 bg-onyx text-gold-metallic rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
+              className="h-12 w-12 bg-onyx text-celeste-oh rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95 disabled:opacity-30 disabled:hover:scale-100"
             >
               <Send className="h-5 w-5" />
             </button>

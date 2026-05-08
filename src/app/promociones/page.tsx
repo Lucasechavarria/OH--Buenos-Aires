@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function PromotionsPage() {
   return (
-    <main className="min-h-screen bg-alabaster selection:bg-gold-leaf selection:text-midnight-blue">
+    <main className="min-h-screen bg-alabaster selection:bg-celeste-oh selection:text-white">
       <Header />
       
       {/* Hero Refinado para la página de Promociones */}
@@ -21,7 +21,7 @@ export default function PromotionsPage() {
         <div className="max-w-7xl mx-auto relative z-10">
           <Link 
             href="/" 
-            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-gold-heritage hover:text-gold-shine transition-all mb-12 group"
+            className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.3em] text-celeste-oh hover:text-brand-accent transition-all mb-12 group"
           >
             <ChevronLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Volver al Inicio
@@ -33,7 +33,7 @@ export default function PromotionsPage() {
             className="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight"
           >
             Beneficios <br />
-            <span className="text-gold-heritage">Exclusivos</span>
+            <span className="text-celeste-oh">Exclusivos</span>
           </motion.h1>
           
           <motion.p 
@@ -48,7 +48,7 @@ export default function PromotionsPage() {
 
         {/* Decoración Luxe */}
         <div className="absolute right-0 bottom-0 w-1/3 h-full pointer-events-none opacity-20">
-            <Ticket className="w-full h-full text-gold-heritage rotate-12 translate-x-1/2 translate-y-1/4" />
+            <Ticket className="w-full h-full text-celeste-oh rotate-12 translate-x-1/2 translate-y-1/4" />
         </div>
       </section>
 
