@@ -40,7 +40,7 @@ export const FlipCard = ({ brand }: FlipCardProps) => {
         transition={{ type: "spring", stiffness: 200, damping: 25 }}
       >
         {/* Lado Frontal (Lado A) */}
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-brand-surface border border-midnight-blue/5 shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-center p-8 transition-colors group-hover:bg-white">
+        <div className="absolute inset-0 h-full w-full rounded-2xl bg-brand-surface border border-onyx/5 shadow-sm overflow-hidden backface-hidden flex flex-col items-center justify-center p-8 transition-colors group-hover:bg-white">
           <div className="relative h-28 w-44 flex items-center justify-center grayscale group-hover:grayscale-0 transition-all duration-500">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -49,31 +49,31 @@ export const FlipCard = ({ brand }: FlipCardProps) => {
               className="max-h-full max-w-full object-contain"
             />
           </div>
-          <h3 className="mt-8 text-xl font-serif text-midnight-blue tracking-tight">
+          <h3 className="mt-8 text-xl font-serif text-onyx tracking-tight">
             {brand.name}
           </h3>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.3em] text-midnight-blue/40 font-bold">
+          <p className="mt-2 text-[10px] uppercase tracking-[0.3em] text-onyx/40 font-bold">
             {brand.category?.name}
           </p>
           
           <div className="absolute bottom-6 flex items-center gap-1.5 opacity-30 group-hover:opacity-100 transition-opacity">
-            <div className="h-1 w-1 rounded-full bg-gold-leaf" />
+            <div className="h-1 w-1 rounded-full bg-brand-accent" />
             <span className="text-[9px] uppercase tracking-widest font-bold">Ver Beneficios</span>
           </div>
         </div>
 
         {/* Lado Posterior (Lado B) */}
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-midnight-blue p-8 backface-hidden rotate-y-180 flex flex-col justify-between text-brand-surface shadow-xl">
+        <div className="absolute inset-0 h-full w-full rounded-2xl bg-onyx p-8 backface-hidden rotate-y-180 flex flex-col justify-between text-brand-surface shadow-xl">
           <div>
             <div className="flex justify-between items-start mb-6">
-              <h3 className="text-2xl font-serif text-gold-leaf">{brand.name}</h3>
-              <Info className="h-4 w-4 text-gold-leaf/40" />
+              <h3 className="text-2xl font-serif text-celeste-oh">{brand.name}</h3>
+              <Info className="h-4 w-4 text-celeste-oh/40" />
             </div>
             
             <div className="space-y-4">
               {brand.activePromotions?.map((promo) => (
                 <div key={promo.id} className="p-4 rounded-xl bg-brand-surface/5 border border-brand-surface/10">
-                  <p className="text-sm font-bold tracking-wide text-gold-leaf mb-1">
+                  <p className="text-sm font-bold tracking-wide text-celeste-oh mb-1">
                     PROMOCIÓN EXCLUSIVA
                   </p>
                   <p className="text-xs font-light leading-relaxed opacity-80">
@@ -87,11 +87,11 @@ export const FlipCard = ({ brand }: FlipCardProps) => {
           <div className="space-y-6">
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-3 text-xs opacity-70">
-                <MapPin className="h-3.5 w-3.5 text-gold-leaf" />
+                <MapPin className="h-3.5 w-3.5 text-celeste-oh" />
                 <span>{brand.location?.floor} • Local {brand.location?.localNumber}</span>
               </div>
               <div className="flex items-center gap-3 text-xs opacity-70">
-                <Phone className="h-3.5 w-3.5 text-gold-leaf" />
+                <Phone className="h-3.5 w-3.5 text-celeste-oh" />
                 <span>{brand.phone}</span>
               </div>
             </div>

@@ -53,7 +53,7 @@ export default function ContactSection() {
           {/* Info Side */}
           <div className="flex-1 lg:max-w-md flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-serif text-white mb-6 leading-tight">
-              Atención <span className="text-gold-heritage font-light italic">Personalizada</span>
+              Atención <span className="text-celeste-oh font-light italic">Personalizada</span>
             </h2>
             
             <p className="text-alabaster/60 font-sans text-sm md:text-base leading-relaxed mb-12">
@@ -62,24 +62,24 @@ export default function ContactSection() {
 
             <div className="flex flex-col gap-8">
               <div className="flex items-center gap-5 group">
-                <div className="h-12 w-12 rounded-full border border-gold-heritage/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
-                  <div className="absolute inset-0 bg-gold-heritage/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <Phone className="h-4 w-4 text-gold-metallic relative z-10" />
+                <div className="h-12 w-12 rounded-full border border-celeste-oh/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
+                  <div className="absolute inset-0 bg-celeste-oh/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <Phone className="h-4 w-4 text-celeste-oh relative z-10" />
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Teléfono</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-gold-heritage transition-colors">+54 11 4000 0000</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">+54 11 4000 0000</p>
                 </div>
               </div>
               
               <div className="flex items-center gap-5 group">
-                <div className="h-12 w-12 rounded-full border border-gold-heritage/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
-                  <div className="absolute inset-0 bg-gold-heritage/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                  <MapPin className="h-4 w-4 text-gold-metallic relative z-10" />
+                <div className="h-12 w-12 rounded-full border border-celeste-oh/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
+                  <div className="absolute inset-0 bg-celeste-oh/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <MapPin className="h-4 w-4 text-celeste-oh relative z-10" />
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Ubicación</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-gold-heritage transition-colors">Av Pueyrredon y Azcuenaga</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">Av Pueyrredon y Azcuenaga</p>
                 </div>
               </div>
             </div>
@@ -88,17 +88,17 @@ export default function ContactSection() {
           {/* Form Side */}
           <div className="flex-1 flex items-center justify-center">
             <form onSubmit={handleSubmit} noValidate className="w-full max-w-lg space-y-8 bg-white/[0.02] backdrop-blur-md p-8 sm:p-12 border border-white/5 rounded-2xl relative overflow-hidden group shadow-2xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-gold-heritage/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-br from-celeste-oh/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
               
               <div className="relative z-10">
                 <div className="flex justify-center mb-10">
-                  <div className="h-14 w-14 flex items-center justify-center border border-gold-heritage/30 rounded-full shadow-inner shadow-gold-heritage/10 bg-onyx/80 backdrop-blur-md">
-                    <Mail className="h-6 w-6 text-gold-metallic" />
+                  <div className="h-14 w-14 flex items-center justify-center border border-celeste-oh/30 rounded-full shadow-inner shadow-celeste-oh/10 bg-onyx/80 backdrop-blur-md">
+                    <Mail className="h-6 w-6 text-celeste-oh" />
                   </div>
                 </div>
                 <div className="space-y-6">
                   <div className="group/input relative">
-                    <label htmlFor="name" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.name ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-gold-heritage'}`}>
+                    <label htmlFor="name" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.name ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-celeste-oh'}`}>
                       Nombre Completo
                     </label>
                     <input 
@@ -106,14 +106,14 @@ export default function ContactSection() {
                       id="name" 
                       value={formData.name}
                       onChange={handleChange}
-                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.name ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-gold-heritage placeholder:text-alabaster/10'}`}
+                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.name ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10'}`}
                       placeholder="Ej. María Pérez"
                     />
                     {errors.name && <AlertCircle className="absolute right-0 bottom-3 w-4 h-4 text-red-500" />}
                   </div>
 
                   <div className="group/input relative">
-                    <label htmlFor="email" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.email ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-gold-heritage'}`}>
+                    <label htmlFor="email" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.email ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-celeste-oh'}`}>
                       Correo Electrónico
                     </label>
                     <input 
@@ -121,14 +121,14 @@ export default function ContactSection() {
                       id="email" 
                       value={formData.email}
                       onChange={handleChange}
-                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.email ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-gold-heritage placeholder:text-alabaster/10'}`}
+                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.email ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10'}`}
                       placeholder="maria@ejemplo.com"
                     />
                     {errors.email && <AlertCircle className="absolute right-0 bottom-3 w-4 h-4 text-red-500" />}
                   </div>
 
                   <div className="group/input relative">
-                    <label htmlFor="message" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.message ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-gold-heritage'}`}>
+                    <label htmlFor="message" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.message ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-celeste-oh'}`}>
                       Mensaje
                     </label>
                     <textarea 
@@ -136,7 +136,7 @@ export default function ContactSection() {
                       rows={4}
                       value={formData.message}
                       onChange={handleChange}
-                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors resize-none font-sans text-alabaster ${errors.message ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-gold-heritage placeholder:text-alabaster/10'}`}
+                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors resize-none font-sans text-alabaster ${errors.message ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10'}`}
                       placeholder="En qué le podemos ayudar..."
                     />
                     {errors.message && <AlertCircle className="absolute right-2 bottom-4 w-4 h-4 text-red-500" />}
@@ -147,7 +147,7 @@ export default function ContactSection() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting || submitted}
-                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-gold-metallic text-onyx hover:bg-gold-shine hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'}`}
+                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-brand-accent text-white hover:opacity-90 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'}`}
                   >
                     <span className="relative z-10 flex items-center gap-3">
                       {isSubmitting ? (

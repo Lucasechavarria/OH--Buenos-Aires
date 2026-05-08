@@ -35,13 +35,13 @@ export const FilterBar = () => {
             
             {/* Search Input */}
             <div className="relative w-full group flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-onyx/40 transition-colors group-focus-within:text-gold-heritage" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-onyx/40 transition-colors group-focus-within:text-celeste-oh" />
               <input
                 type="text"
                 placeholder="Buscar marcas, locales o servicios..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-10 py-3.5 bg-white border border-onyx/10 rounded-xl focus:ring-1 focus:ring-gold-heritage focus:border-gold-heritage font-sans text-xs tracking-wide transition-all text-onyx placeholder:text-onyx/60 shadow-sm"
+                className="w-full pl-12 pr-10 py-3.5 bg-white border border-onyx/10 rounded-xl focus:ring-1 focus:ring-celeste-oh focus:border-celeste-oh font-sans text-xs tracking-wide transition-all text-onyx placeholder:text-onyx/60 shadow-sm"
               />
               <AnimatePresence>
                 {searchQuery && (
@@ -63,7 +63,7 @@ export const FilterBar = () => {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full appearance-none pl-6 pr-10 py-3.5 bg-white border border-onyx/10 rounded-xl focus:ring-1 focus:ring-gold-heritage focus:border-gold-heritage font-sans text-xs tracking-[0.2em] transition-all text-onyx font-bold shadow-sm uppercase cursor-pointer"
+                className="w-full appearance-none pl-6 pr-10 py-3.5 bg-white border border-onyx/10 rounded-xl focus:ring-1 focus:ring-celeste-oh focus:border-celeste-oh font-sans text-xs tracking-[0.2em] transition-all text-onyx font-bold shadow-sm uppercase cursor-pointer"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat.value} value={cat.value}>

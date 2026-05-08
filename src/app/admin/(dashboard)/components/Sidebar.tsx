@@ -25,10 +25,10 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-onyx border-r border-gold-heritage/10 h-screen sticky top-0 flex flex-col hidden md:flex">
-      <div className="h-20 flex items-center px-8 border-b border-gold-heritage/10">
+    <aside className="w-64 bg-onyx border-r border-celeste-oh/10 h-screen sticky top-0 flex flex-col hidden md:flex">
+      <div className="h-20 flex items-center px-8 border-b border-celeste-oh/10">
         <h1 className="text-xl font-serif text-white">
-          OH! <span className="text-gold-heritage italic font-light">Admin</span>
+          OH! <span className="text-celeste-oh italic font-light">Admin</span>
         </h1>
       </div>
 
@@ -40,7 +40,7 @@ export default function AdminSidebar() {
             <Link 
               key={item.href} 
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-sans text-sm ${isActive ? 'bg-gold-heritage/10 text-gold-heritage font-medium' : 'text-alabaster/60 hover:text-alabaster hover:bg-white/5'}`}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-sans text-sm ${isActive ? 'bg-celeste-oh/10 text-celeste-oh font-medium' : 'text-alabaster/60 hover:text-alabaster hover:bg-white/5'}`}
             >
               <Icon className="w-4 h-4" />
               {item.label}
@@ -49,7 +49,7 @@ export default function AdminSidebar() {
         })}
       </nav>
 
-      <div className="p-4 border-t border-gold-heritage/10">
+      <div className="p-4 border-t border-celeste-oh/10">
         <button 
           onClick={handleLogout}
           className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-sans text-sm text-red-400 hover:bg-red-500/10 w-full text-left"

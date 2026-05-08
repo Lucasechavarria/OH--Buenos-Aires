@@ -6,40 +6,39 @@
  * Tipografía: Montserrat (Gotham/Futura Style)
  */
 :root {
-  /* Alabaster Neutral (Rosa Viejo) - Fondo principal claro */
-  --background: oklch(96% 0.01 10);
+  /* Alabaster White - Fondo principal limpio y premium */
+  --background: oklch(100% 0 0);
   
-  /* Onyx Sophistication - Texto oscuro */
-  --foreground: oklch(18% 0.01 250);
+  /* Deep Onyx - Texto oscuro y sofisticado */
+  --foreground: oklch(15% 0.01 250);
   
-  /* Heritage Gold (Base) */
-  --brand-accent: oklch(75% 0.12 85);
+  /* Celeste OH! - El acento distintivo de OH! Buenos Aires */
+  --brand-accent: oklch(75% 0.08 210);
   
   --brand-primary: var(--foreground);
-  --brand-surface: oklch(98% 0.005 10);
+  --brand-surface: oklch(98% 0.005 210);
   
-  /* High-Gloss Gold Gradient */
-  --gold-gradient: linear-gradient(
+  /* Soft Celeste Gradient - Reemplaza el gradiente dorado por algo más etéreo */
+  --brand-gradient: linear-gradient(
     135deg, 
-    oklch(70% 0.12 85) 0%, 
-    oklch(80% 0.14 85) 30%, 
-    oklch(96% 0.16 90) 50%, 
-    oklch(80% 0.14 85) 70%, 
-    oklch(70% 0.12 85) 100%
+    oklch(75% 0.08 210) 0%, 
+    oklch(85% 0.06 210) 50%, 
+    oklch(75% 0.08 210) 100%
   );
   
-  --rosa-viejo: oklch(96% 0.01 10);
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: oklch(18% 0.01 250 / 0.1);
+  --celeste-oh: oklch(75% 0.08 210);
+  --celeste-soft: oklch(94% 0.02 210);
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: oklch(15% 0.01 250 / 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-onyx: oklch(18% 0.01 250);
-  --color-gold-heritage: oklch(75% 0.12 85);
-  --color-alabaster: var(--rosa-viejo);
-  --color-rosa-viejo: var(--rosa-viejo);
+  --color-onyx: oklch(15% 0.01 250);
+  --color-celeste-oh: var(--celeste-oh);
+  --color-celeste-soft: var(--celeste-soft);
+  --color-alabaster: oklch(98% 0.005 210);
   
   --font-serif: "Playfair Display", serif;
   --font-sans: "Montserrat", sans-serif;
@@ -71,47 +70,45 @@ h1, h2, h3, h4, .font-serif {
 
 .tracking-gotham {
   letter-spacing: 0.15em;
-  font-weight: 500; /* Medium for better readability */
+  font-weight: 500;
 }
 
 /** 
- * Luxury Metallic Utils 
+ * Luxury Minimalist Utils 
  */
-.bg-gold-metallic {
-  background: var(--gold-gradient);
+.bg-brand-accent {
+  background: var(--brand-gradient);
   background-size: 200% 200%;
 }
 
-.shadow-gold-glow {
-  filter: drop-shadow(0 0 4px oklch(75% 0.12 85 / 0.4));
+.shadow-premium {
+  filter: drop-shadow(0 0 8px oklch(75% 0.08 210 / 0.2));
 }
 
-.text-gold-shine {
-  color: var(--brand-accent);
-  text-shadow: 0 0 2px oklch(96% 0.16 90 / 0.5);
+.text-celeste-oh {
+  color: var(--celeste-oh);
 }
 
-.border-gold-shimmer {
-  border-color: oklch(75% 0.12 85 / 0.5);
-  box-shadow: inset 0 0 10px oklch(96% 0.16 90 / 0.1);
+.border-celeste-oh {
+  border-color: oklch(75% 0.08 210 / 0.3);
 }
 
-/* Golden Glide Animation */
-@keyframes golden-glide {
+/* Subtle Glide Animation */
+@keyframes soft-glide {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-.animate-golden-glide:hover {
-  animation: golden-glide 2s ease-in-out infinite;
+.animate-soft-glide:hover {
+  animation: soft-glide 3s ease-in-out infinite;
 }
 
 /* Background Ornament */
 .ornament-bg {
   background-image: radial-gradient(circle at 1.5px 1.5px, var(--brand-accent) 1px, transparent 0);
-  background-size: 100px 100px;
-  opacity: 0.15;
+  background-size: 80px 80px;
+  opacity: 0.1;
 }
 
 .perspective-1000 {
@@ -132,9 +129,10 @@ h1, h2, h3, h4, .font-serif {
 
 ::selection {
   background: var(--brand-accent);
-  color: var(--background);
+  color: white;
 }
 
 html {
   scroll-behavior: smooth;
 }
+
