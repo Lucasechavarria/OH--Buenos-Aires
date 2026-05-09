@@ -14,6 +14,7 @@ export default function InstagramAdmin() {
   // Form State
   const [linkUrl, setLinkUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+  const [postType, setPostType] = useState<"post" | "reel">("post");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -45,6 +46,13 @@ export default function InstagramAdmin() {
     if (linkUrl && !file) {
       const media = extractMediaUrl(linkUrl);
       setPreviewUrl(media);
+      
+      // Auto-detect type
+      if (linkUrl.toLowerCase().includes('/reel/') || linkUrl.toLowerCase().includes('/reels/')) {
+        setPostType("reel");
+      } else {
+        setPostType("post");
+      }
     }
   }, [linkUrl, file]);
 
@@ -82,6 +90,7 @@ export default function InstagramAdmin() {
         { 
           link_url: linkUrl, 
           image_url, 
+          type: postType,
           active: true, 
           order_index: posts.length 
         }
@@ -118,7 +127,8 @@ export default function InstagramAdmin() {
 
       const { error } = await supabase.from("instagram_posts").update({
         link_url: linkUrl,
-        image_url
+        image_url,
+        type: postType
       }).eq("id", editingId);
       
       if (error) throw error;
@@ -203,7 +213,27 @@ export default function InstagramAdmin() {
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Opción B: Subir Manualmente (Si falla el link)</label>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Tipo de Contenido</label>
+                <div className="flex gap-2">
+                  <button 
+                    type="button"
+                    onClick={() => setPostType("post")}
+                    className={`flex-1 py-3 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all ${postType === 'post' ? 'bg-white text-onyx border-white shadow-lg' : 'bg-white/5 text-white/40 border-white/10 hover:bg-white/10'}`}
+                  >
+                    Foto / Post
+                  </button>
+                  <button 
+                    type="button"
+                    onClick={() => setPostType("reel")}
+                    className={`flex-1 py-3 rounded-xl border text-[10px] font-bold uppercase tracking-widest transition-all ${postType === 'reel' ? 'bg-pink-500 text-white border-pink-500 shadow-lg shadow-pink-500/20' : 'bg-white/5 text-white/40 border-white/10 hover:bg-white/10'}`}
+                  >
+                    Video / Reel
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Opción Manual: Subir Imagen</label>
                 <input 
                   type="file" 
                   accept="image/*" 
@@ -230,7 +260,14 @@ export default function InstagramAdmin() {
             <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3 text-center">Vista Previa Automática</label>
             <div className="aspect-square rounded-2xl border-2 border-dashed border-white/10 overflow-hidden bg-white/5 flex items-center justify-center relative group">
               {previewUrl ? (
-                <img src={previewUrl} alt="Preview" referrerPolicy="no-referrer" className="w-full h-full object-cover animate-in fade-in zoom-in duration-500" />
+                <div className="relative w-full h-full">
+                  <img src={previewUrl} alt="Preview" referrerPolicy="no-referrer" className="w-full h-full object-cover animate-in fade-in zoom-in duration-500" />
+                  {postType === 'reel' && (
+                    <div className="absolute top-4 right-4 bg-pink-500 text-white p-2 rounded-lg shadow-lg">
+                      <InstagramIcon className="w-4 h-4" />
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div className="text-center p-6">
                   <InstagramIcon className="w-8 h-8 text-white/10 mx-auto mb-2" />
@@ -253,6 +290,11 @@ export default function InstagramAdmin() {
         ) : posts.map(post => (
           <div key={post.id} className={`group relative aspect-square rounded-2xl overflow-hidden border transition-all ${post.active ? 'border-white/10 shadow-lg shadow-black/40' : 'border-red-500/20 grayscale opacity-40'}`}>
             <img src={post.image_url} alt="Instagram" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+            {post.type === 'reel' && (
+              <div className="absolute top-3 right-3 bg-pink-500/80 backdrop-blur-sm text-white p-1.5 rounded-lg">
+                <Play className="w-3 h-3 fill-white" />
+              </div>
+            )}
             
             {/* Overlay Actions */}
             <div className="absolute inset-0 bg-onyx/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
@@ -260,7 +302,7 @@ export default function InstagramAdmin() {
                 <button onClick={() => toggleActive(post.id, post.active)} className={`p-2.5 rounded-xl border transition-all ${post.active ? 'border-emerald-500/30 text-emerald-400 bg-emerald-500/10' : 'border-amber-500/30 text-amber-400 bg-amber-500/10'}`}>
                   {post.active ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
                 </button>
-                <button onClick={() => { setEditingId(post.id); setLinkUrl(post.link_url || ""); }} className="p-2.5 rounded-xl border border-white/10 text-white bg-white/5 hover:bg-white/10">
+                <button onClick={() => { setEditingId(post.id); setLinkUrl(post.link_url || ""); setPostType(post.type || "post"); }} className="p-2.5 rounded-xl border border-white/10 text-white bg-white/5 hover:bg-white/10">
                   <Edit className="w-4 h-4" />
                 </button>
                 <button onClick={() => handleDelete(post.id)} className={`p-2.5 rounded-xl border transition-all ${confirmId === post.id ? 'bg-red-600 border-red-500 text-white' : 'border-red-500/30 text-red-400 hover:bg-red-500/10'}`}>

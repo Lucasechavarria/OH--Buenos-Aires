@@ -12,6 +12,12 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const PlayIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M8 5v14l11-7z" />
+  </svg>
+);
+
 export default function InstagramFeed() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,6 +80,11 @@ export default function InstagramFeed() {
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
+              {img.type === 'reel' && (
+                <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-md p-2 rounded-full border border-white/20 group-hover:bg-pink-500 group-hover:border-pink-500 transition-all duration-500 shadow-lg">
+                  <PlayIcon className="w-3 h-3 text-white" />
+                </div>
+              )}
               <div className="absolute inset-0 bg-celeste-oh/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <InstagramIcon className="h-8 w-8 text-white scale-75 group-hover:scale-100 transition-transform duration-500" />
               </div>
