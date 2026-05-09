@@ -28,8 +28,7 @@ export default function InstagramFeed() {
         .from("instagram_posts")
         .select("*")
         .eq("active", true)
-        .order("order_index", { ascending: true })
-        .limit(6);
+        .order("order_index", { ascending: true });
       
       if (!error && data) {
         setPosts(data);
@@ -38,6 +37,7 @@ export default function InstagramFeed() {
     };
     fetchPosts();
   }, []);
+
   return (
     <section className="py-24 px-6 overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto">
@@ -60,39 +60,80 @@ export default function InstagramFeed() {
             Ver Perfil Completo
           </a>
         </div>
+      </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {posts.length > 0 ? posts.map((img, idx) => (
+      {/* Carousel Container */}
+      <div className="relative group px-4">
+        <div 
+          id="instagram-carousel"
+          className="flex overflow-x-auto gap-6 pb-12 snap-x snap-mandatory scrollbar-hide no-scrollbar scroll-smooth"
+        >
+          {loading ? (
+            Array(6).fill(0).map((_, i) => (
+              <div key={i} className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-3xl bg-onyx/5 animate-pulse" />
+            ))
+          ) : posts.length > 0 ? posts.map((img, idx) => (
             <motion.a
               key={img.id}
               href={img.link_url || "https://www.instagram.com/oh_buenosaires"}
               target="_blank"
               rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ delay: idx * 0.1 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
               viewport={{ once: true }}
-              className="relative aspect-square rounded-2xl overflow-hidden group shadow-xl"
+              className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-[32px] overflow-hidden group/item shadow-xl snap-center relative border border-onyx/5"
             >
               <img 
                 src={img.image_url} 
                 alt="Instagram feed" 
                 referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110"
               />
+              
+              {/* Badge - Consistent with user preference (Instagram Icon for Reels) */}
               {img.type === 'reel' && (
-                <div className="absolute top-4 right-4 bg-black/20 backdrop-blur-md p-2 rounded-full border border-white/20 group-hover:bg-pink-500 group-hover:border-pink-500 transition-all duration-500 shadow-lg">
-                  <PlayIcon className="w-3 h-3 text-white" />
+                <div className="absolute top-5 right-5 bg-white/20 backdrop-blur-md p-2.5 rounded-2xl border border-white/30 shadow-lg group-hover/item:bg-pink-500 transition-colors duration-500">
+                  <InstagramIcon className="w-3 h-3 text-white" />
                 </div>
               )}
-              <div className="absolute inset-0 bg-celeste-oh/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <InstagramIcon className="h-8 w-8 text-white scale-75 group-hover:scale-100 transition-transform duration-500" />
+
+              {/* Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-onyx/60 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex items-center justify-center">
+                <div className="p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500">
+                  <InstagramIcon className="h-6 w-6 text-white" />
+                </div>
               </div>
             </motion.a>
-          )) : !loading && (
-            <div className="col-span-full text-center py-10 text-onyx/20 italic">No hay posts para mostrar</div>
+          )) : (
+            <div className="w-full text-center py-10 text-onyx/20 italic">No hay posts para mostrar</div>
           )}
         </div>
+
+        {/* Navigation Arrows */}
+        <button 
+          onClick={() => document.getElementById('instagram-carousel')?.scrollBy({ left: -300, behavior: 'smooth' })}
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/80 backdrop-blur-md border border-onyx/5 shadow-xl flex items-center justify-center text-onyx opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 -translate-x-6 group-hover:translate-x-2"
+        >
+          <span className="text-xl leading-none">&larr;</span>
+        </button>
+        <button 
+          onClick={() => document.getElementById('instagram-carousel')?.scrollBy({ left: 300, behavior: 'smooth' })}
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/80 backdrop-blur-md border border-onyx/5 shadow-xl flex items-center justify-center text-onyx opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 translate-x-6 group-hover:-translate-x-2"
+        >
+          <span className="text-xl leading-none">&rarr;</span>
+        </button>
+
+        {/* Custom Styles for horizontal scroll */}
+        <style jsx>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
       </div>
     </section>
   );
