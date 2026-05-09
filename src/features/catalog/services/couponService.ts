@@ -44,30 +44,37 @@ export const generateCouponPDF = async (brand: Brand, promotion: Promotion) => {
       console.warn("Could not create unique redemption. Falling back to promotion ID.");
     }
     
-    // Configuración estética
-    const goldColor = [200, 165, 100]; // #C8A564
+    // Configuración estética (Quiet Luxury 2026)
+    const celesteColor = [135, 206, 235]; // #87CEEB - Celeste OH!
     const onyxColor = [24, 24, 24]; // #181818
+    const whiteColor = [255, 255, 255];
 
     // Fondo y Bordes
-    doc.setFillColor(onyxColor[0], onyxColor[1], onyxColor[2]);
+    doc.setFillColor(whiteColor[0], whiteColor[1], whiteColor[2]);
     doc.rect(0, 0, 105, 148, "F");
     
-    doc.setDrawColor(goldColor[0], goldColor[1], goldColor[2]);
-    doc.setLineWidth(1);
+    // Borde sutil celeste
+    doc.setDrawColor(celesteColor[0], celesteColor[1], celesteColor[2]);
+    doc.setLineWidth(0.5);
     doc.rect(5, 5, 95, 138, "S");
 
+    // Elemento decorativo superior (línea gruesa celeste)
+    doc.setFillColor(celesteColor[0], celesteColor[1], celesteColor[2]);
+    doc.rect(0, 0, 105, 4, "F");
+
     // Título / Marca
-    doc.setTextColor(goldColor[0], goldColor[1], goldColor[2]);
+    doc.setTextColor(onyxColor[0], onyxColor[1], onyxColor[2]);
     doc.setFont("serif", "bold");
     doc.setFontSize(22);
     doc.text("OH! BUENOS AIRES", 52.5, 25, { align: "center" });
     
     doc.setFontSize(14);
     doc.setFont("helvetica", "normal");
+    doc.setTextColor(celesteColor[0], celesteColor[1], celesteColor[2]);
     doc.text("CUPÓN EXCLUSIVO", 52.5, 35, { align: "center" });
 
     // Línea divisoria superior
-    doc.setDrawColor(goldColor[0], goldColor[1], goldColor[2], 0.3);
+    doc.setDrawColor(onyxColor[0], onyxColor[1], onyxColor[2], 0.1);
     doc.line(20, 38, 85, 38);
 
     // Espacio para Logo con fondo blanco circular
@@ -86,14 +93,14 @@ export const generateCouponPDF = async (brand: Brand, promotion: Promotion) => {
     }
 
     // Información de la Marca
-    doc.setTextColor(255, 255, 255);
+    doc.setTextColor(onyxColor[0], onyxColor[1], onyxColor[2]);
     doc.setFontSize(16);
     doc.setFont("helvetica", "bold");
     doc.text(brand.name.toUpperCase(), 52.5, 75, { align: "center" });
 
     // La Promoción
-    doc.setFontSize(22);
-    doc.setTextColor(goldColor[0], goldColor[1], goldColor[2]);
+    doc.setFontSize(24);
+    doc.setTextColor(onyxColor[0], onyxColor[1], onyxColor[2]);
     doc.text(promotion.title, 52.5, 90, { align: "center" });
 
     // QR Code con URL de Validación para la tienda
@@ -104,15 +111,15 @@ export const generateCouponPDF = async (brand: Brand, promotion: Promotion) => {
       margin: 1,
       width: 200,
       color: {
-        dark: "#C8A564",
-        light: "#181818"
+        dark: "#181818",
+        light: "#FFFFFF"
       }
     });
 
     doc.addImage(qrDataUrl, "PNG", 32.5, 98, 40, 40);
 
     // Pie de página con fecha
-    doc.setTextColor(255, 255, 255, 0.5);
+    doc.setTextColor(onyxColor[0], onyxColor[1], onyxColor[2], 0.4);
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.text(`Generado el: ${generationDate}`, 52.5, 130, { align: "center" });
@@ -122,6 +129,8 @@ export const generateCouponPDF = async (brand: Brand, promotion: Promotion) => {
         doc.text(`Válido hasta: ${until}`, 52.5, 135, { align: "center" });
     }
 
+    doc.setTextColor(celesteColor[0], celesteColor[1], celesteColor[2]);
+    doc.setFont("helvetica", "bold");
     doc.text("RECOLETA, BUENOS AIRES", 52.5, 142, { align: "center" });
 
     // Descargar

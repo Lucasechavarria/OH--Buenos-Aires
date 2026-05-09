@@ -122,14 +122,26 @@ export default function PromotionsSection() {
                   </div>
                 )}
                 
-                <button
-                  onClick={() => handleDownload(promo)}
-                  disabled={generatingId === promo.id}
-                  className="w-full h-14 rounded-2xl bg-onyx text-alabaster text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-brand-accent hover:text-white transition-all duration-300 shadow-lg shadow-onyx/5 disabled:opacity-50 group/btn"
-                >
-                  <Ticket className={`w-4 h-4 ${generatingId === promo.id ? 'animate-spin' : 'group-hover/btn:rotate-12 transition-transform'}`} />
-                  {generatingId === promo.id ? "Generando..." : "Descargar Cupón"}
-                </button>
+                {promo.externalUrl ? (
+                  <a
+                    href={promo.externalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full h-14 rounded-2xl bg-onyx text-alabaster text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-brand-accent hover:text-white transition-all duration-300 shadow-lg shadow-onyx/5 group/btn"
+                  >
+                    <ExternalLink className="w-4 h-4 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                    Ver en Web Oficial
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => handleDownload(promo)}
+                    disabled={generatingId === promo.id}
+                    className="w-full h-14 rounded-2xl bg-onyx text-alabaster text-[10px] font-bold uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-brand-accent hover:text-white transition-all duration-300 shadow-lg shadow-onyx/5 disabled:opacity-50 group/btn"
+                  >
+                    <Ticket className={`w-4 h-4 ${generatingId === promo.id ? 'animate-spin' : 'group-hover/btn:rotate-12 transition-transform'}`} />
+                    {generatingId === promo.id ? "Generando..." : "Descargar Cupón"}
+                  </button>
+                )}
               </div>
             </motion.div>
           ))}

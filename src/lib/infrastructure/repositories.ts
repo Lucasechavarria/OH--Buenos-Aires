@@ -24,7 +24,7 @@ export class SupabaseBrandRepository implements IBrandRepository {
         ),
         locations (id, floor, local_number),
         google_maps_url,
-        promotions (id, title, active, image_url, valid_from, valid_until)
+        promotions (id, title, active, image_url, valid_from, valid_until, external_url)
       `);
 
     // Applying Filters dynamically
@@ -79,7 +79,8 @@ export class SupabaseBrandRepository implements IBrandRepository {
               active: p.active,
               imageUrl: p.image_url,
               validFrom: p.valid_from ? new Date(p.valid_from) : undefined,
-              validUntil: p.valid_until ? new Date(p.valid_until) : undefined
+              validUntil: p.valid_until ? new Date(p.valid_until) : undefined,
+              externalUrl: p.external_url
             }))
         : []
     }));
@@ -164,6 +165,7 @@ export class SupabasePromotionRepository implements IPromotionRepository {
         imageUrl: p.image_url,
         validFrom: p.valid_from ? new Date(p.valid_from) : undefined,
         validUntil: p.valid_until ? new Date(p.valid_until) : undefined,
+        externalUrl: p.external_url,
         brand: p.brands ? {
           name: p.brands.name,
           logoUrl: p.brands.logo_url

@@ -19,6 +19,7 @@ export default function PromotionsAdmin() {
   const [brandId, setBrandId] = useState("");
   const [validFrom, setValidFrom] = useState("");
   const [validUntil, setValidUntil] = useState("");
+  const [externalUrl, setExternalUrl] = useState("");
 
   const fetchData = async () => {
     setLoading(true);
@@ -46,7 +47,8 @@ export default function PromotionsAdmin() {
         brand_id: brandId, 
         active: true,
         valid_from: validFrom || null,
-        valid_until: validUntil || null
+        valid_until: validUntil || null,
+        external_url: externalUrl || null
       }
     ]);
     
@@ -55,6 +57,7 @@ export default function PromotionsAdmin() {
     setBrandId("");
     setValidFrom("");
     setValidUntil("");
+    setExternalUrl("");
     fetchData();
   };
 
@@ -105,6 +108,7 @@ export default function PromotionsAdmin() {
     setBrandId(promo.brand_id);
     setValidFrom(promo.valid_from ? new Date(promo.valid_from).toISOString().slice(0, 16) : "");
     setValidUntil(promo.valid_until ? new Date(promo.valid_until).toISOString().slice(0, 16) : "");
+    setExternalUrl(promo.external_url || "");
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -115,6 +119,7 @@ export default function PromotionsAdmin() {
     setBrandId("");
     setValidFrom("");
     setValidUntil("");
+    setExternalUrl("");
   };
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -127,7 +132,8 @@ export default function PromotionsAdmin() {
         description,
         brand_id: brandId,
         valid_from: validFrom || null,
-        valid_until: validUntil || null
+        valid_until: validUntil || null,
+        external_url: externalUrl || null
       }).eq("id", editingId);
 
       if (error) throw error;
@@ -177,6 +183,10 @@ export default function PromotionsAdmin() {
             <div>
               <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">Descripción Detallada</label>
               <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Explica el beneficio..." className="w-full bg-onyx/50 border border-gold-heritage/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold-heritage transition-all placeholder:text-white/10" />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-2">URL Externa (Opcional - Redirige en lugar de Cupón)</label>
+              <input type="url" value={externalUrl} onChange={e => setExternalUrl(e.target.value)} placeholder="https://marca.com/promo" className="w-full bg-onyx/50 border border-gold-heritage/20 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-gold-heritage transition-all placeholder:text-white/10" />
             </div>
           </div>
           

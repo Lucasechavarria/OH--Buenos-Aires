@@ -23,6 +23,7 @@ export interface Promotion {
   imageUrl?: string;
   validFrom?: Date;
   validUntil?: Date;
+  externalUrl?: string;
   brand?: {
     name: string;
     logoUrl?: string;
