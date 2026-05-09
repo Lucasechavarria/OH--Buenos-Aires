@@ -14,6 +14,7 @@ export default function InstagramAdmin() {
   // Form State
   const [linkUrl, setLinkUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState("");
+  const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -35,32 +36,52 @@ export default function InstagramAdmin() {
       const regex = /instagram\.com\/(?:p|reels|reel)\/([^/?#&]+)/;
       const match = url.match(regex);
       if (match && match[1]) {
-        return `https://www.instagram.com/p/${match[1]}/media/?size=l`;
+        // Use a proxy to avoid CORS and Instagram referer blocks
+        return `https://images.weserv.nl/?url=https://www.instagram.com/p/${match[1]}/media/?size=l&default=https://via.placeholder.com/600x600?text=Instagram+Post`;
       }
       return "";
     };
 
-    if (linkUrl) {
+    if (linkUrl && !file) {
       const media = extractMediaUrl(linkUrl);
       setPreviewUrl(media);
-    } else {
-      setPreviewUrl("");
     }
-  }, [linkUrl]);
+  }, [linkUrl, file]);
+
+  // Handle file preview
+  useEffect(() => {
+    if (file) {
+      const objectUrl = URL.createObjectURL(file);
+      setPreviewUrl(objectUrl);
+      return () => URL.revokeObjectURL(objectUrl);
+    }
+  }, [file]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!previewUrl) {
-      alert("Por favor ingresa un link válido de Instagram (Post o Reel)");
+    if (!previewUrl && !file) {
+      alert("Por favor ingresa un link o sube una imagen");
       return;
     }
     setUploading(true);
     
     try {
+      let image_url = previewUrl;
+
+      // If a file was uploaded, use it instead of the auto-detected one
+      if (file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage.from('instagram').upload(fileName, file);
+        if (uploadError) throw uploadError;
+        const { data: publicData } = supabase.storage.from('instagram').getPublicUrl(fileName);
+        image_url = publicData.publicUrl;
+      }
+
       const { error: dbError } = await supabase.from("instagram_posts").insert([
         { 
           link_url: linkUrl, 
-          image_url: previewUrl, 
+          image_url, 
           active: true, 
           order_index: posts.length 
         }
@@ -85,9 +106,19 @@ export default function InstagramAdmin() {
     setUploading(true);
 
     try {
+      let image_url = previewUrl;
+
+      if (file) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        await supabase.storage.from('instagram').upload(fileName, file);
+        const { data: publicData } = supabase.storage.from('instagram').getPublicUrl(fileName);
+        image_url = publicData.publicUrl;
+      }
+
       const { error } = await supabase.from("instagram_posts").update({
         link_url: linkUrl,
-        image_url: previewUrl
+        image_url
       }).eq("id", editingId);
       
       if (error) throw error;
@@ -95,6 +126,7 @@ export default function InstagramAdmin() {
       setEditingId(null);
       setLinkUrl("");
       setPreviewUrl("");
+      setFile(null);
       fetchPosts();
     } catch (err: any) {
       alert("Error: " + err.message);
@@ -155,23 +187,34 @@ export default function InstagramAdmin() {
 
         <form onSubmit={editingId ? handleUpdate : handleCreate} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2 space-y-6">
-            <div>
-              <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Link de Instagram (Post o Reel)</label>
-              <div className="relative">
-                <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+            <div className="grid grid-cols-1 gap-6">
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Opción A: Link de Instagram (Auto-detectar)</label>
+                <div className="relative">
+                  <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20" />
+                  <input 
+                    type="text" 
+                    value={linkUrl} 
+                    onChange={e => { setLinkUrl(e.target.value); setFile(null); }} 
+                    placeholder="https://www.instagram.com/p/..." 
+                    className="w-full bg-onyx/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-pink-500 transition-all text-sm" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3">Opción B: Subir Manualmente (Si falla el link)</label>
                 <input 
-                  type="text" 
-                  value={linkUrl} 
-                  onChange={e => setLinkUrl(e.target.value)} 
-                  placeholder="Ej: https://www.instagram.com/reels/CzY6m8rO_X_/" 
-                  className="w-full bg-onyx/50 border border-white/10 rounded-2xl pl-12 pr-4 py-4 text-white focus:outline-none focus:border-pink-500 transition-all text-sm" 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={e => { setFile(e.target.files?.[0] || null); setLinkUrl(""); }} 
+                  className="w-full text-xs file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-[10px] file:uppercase file:bg-white/5 file:text-white text-alabaster/40 border border-white/5 rounded-2xl p-2 bg-white/[0.02]" 
                 />
               </div>
-              <p className="mt-3 text-[10px] text-alabaster/30 italic">Soporta formatos: /p/, /reel/ y /reels/</p>
             </div>
             
             <button 
-              disabled={uploading || !previewUrl} 
+              disabled={uploading || (!previewUrl && !file)} 
               type="submit" 
               className="px-10 py-4 bg-pink-600 text-white rounded-2xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-pink-500 transition-all shadow-lg flex items-center justify-center gap-2 disabled:opacity-30 disabled:hover:scale-100"
             >
@@ -187,7 +230,7 @@ export default function InstagramAdmin() {
             <label className="block text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-3 text-center">Vista Previa Automática</label>
             <div className="aspect-square rounded-2xl border-2 border-dashed border-white/10 overflow-hidden bg-white/5 flex items-center justify-center relative group">
               {previewUrl ? (
-                <img src={previewUrl} alt="Preview" className="w-full h-full object-cover animate-in fade-in zoom-in duration-500" />
+                <img src={previewUrl} alt="Preview" referrerPolicy="no-referrer" className="w-full h-full object-cover animate-in fade-in zoom-in duration-500" />
               ) : (
                 <div className="text-center p-6">
                   <InstagramIcon className="w-8 h-8 text-white/10 mx-auto mb-2" />
@@ -209,7 +252,7 @@ export default function InstagramAdmin() {
           <div className="col-span-full py-20 text-center"><RefreshCw className="w-8 h-8 text-white/20 animate-spin mx-auto" /></div>
         ) : posts.map(post => (
           <div key={post.id} className={`group relative aspect-square rounded-2xl overflow-hidden border transition-all ${post.active ? 'border-white/10 shadow-lg shadow-black/40' : 'border-red-500/20 grayscale opacity-40'}`}>
-            <img src={post.image_url} alt="Instagram" className="w-full h-full object-cover" />
+            <img src={post.image_url} alt="Instagram" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
             
             {/* Overlay Actions */}
             <div className="absolute inset-0 bg-onyx/80 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">

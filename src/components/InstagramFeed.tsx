@@ -71,6 +71,7 @@ export default function InstagramFeed() {
               <img 
                 src={img.image_url} 
                 alt="Instagram feed" 
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-celeste-oh/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
