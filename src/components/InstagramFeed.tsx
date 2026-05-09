@@ -1,30 +1,21 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { useQuery } from "@tanstack/react-query";
 
 import { InstagramIcon } from "@/src/components/Icons";
 
 export default function InstagramFeed() {
-  const [posts, setPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
+  const { data: posts = [], isLoading } = useQuery({
+    queryKey: ["instagram-feed"],
+    queryFn: async () => {
       const { data, error } = await supabase
         .from("instagram_posts")
         .select("*")
         .eq("active", true)
         .order("order_index", { ascending: true });
-      
-      if (!error && data) {
-        setPosts(data);
-      }
-      setLoading(false);
-    };
-    fetchPosts();
-  }, []);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 1000 * 60 * 15, // Instagram feed doesn't change often
+  });
 
   return (
     <section className="py-24 px-6 overflow-hidden bg-white">

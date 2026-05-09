@@ -1,27 +1,21 @@
-"use client";
-
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { useQuery } from "@tanstack/react-query";
 
 export default function HeroCarousel() {
-  const [images, setImages] = useState<any[]>([]);
   const [index, setIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchHero = async () => {
+  const { data: images = [] } = useQuery({
+    queryKey: ["hero-images"],
+    queryFn: async () => {
       const { data, error } = await supabase
         .from("hero_images")
         .select("*")
         .eq("active", true)
         .order("order_index", { ascending: true });
-      
-      if (!error && data && data.length > 0) {
-        setImages(data);
-      }
-    };
-    fetchHero();
-  }, []);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 1000 * 60 * 10,
+  });
 
   useEffect(() => {
     if (images.length === 0) return;

@@ -1,27 +1,27 @@
-
-"use client";
-
-import { useEffect, useState } from "react";
-import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 
 export default function BannersSlider() {
-  const [banners, setBanners] = useState<any[]>([]);
-
-  useEffect(() => {
-    const fetchBanners = async () => {
-      const { data } = await supabase
+  const { data: banners = [], isLoading } = useQuery({
+    queryKey: ["banners-home"],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from("banners")
         .select("*")
         .eq("active", true)
         .order("created_at", { ascending: false });
-        
-      if (data && data.length > 0) {
-        setBanners(data);
-      }
-    };
-    fetchBanners();
-  }, []);
+      if (error) throw error;
+      return data || [];
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  if (isLoading) return (
+    <div className="w-full bg-onyx py-20 px-6">
+      <div className="max-w-7xl mx-auto flex gap-8">
+        {[1,2,3].map(i => <div key={i} className="min-w-[500px] h-[350px] bg-white/5 rounded-[2.5rem] animate-pulse" />)}
+      </div>
+    </div>
+  );
 
   if (banners.length === 0) return null;
 
