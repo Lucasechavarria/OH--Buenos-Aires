@@ -6,12 +6,6 @@ import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 import { InstagramIcon } from "@/src/components/Icons";
 
-const PlayIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className={className}>
-    <path d="M8 5v14l11-7z" />
-  </svg>
-);
-
 export default function InstagramFeed() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,7 +31,7 @@ export default function InstagramFeed() {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between mb-12 gap-6">
           <div className="flex items-center gap-4">
-            <div className="h-12 w-12 rounded-full bg-brand-accent flex items-center justify-center shadow-lg">
+            <div className="h-12 w-12 rounded-full bg-brand-accent flex items-center justify-center shadow-lg group">
               <InstagramIcon className="h-6 w-6 text-white" />
             </div>
             <div>
