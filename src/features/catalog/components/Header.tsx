@@ -9,7 +9,6 @@ const NAV_ITEMS = [
   { label: "Marcas", href: "/marcas" },
   { label: "Gastronomía", href: "/gastronomia" },
   { label: "Novedades", href: "/novedades" },
-  { label: "Agenda", href: "/agenda" },
   { label: "Promociones", href: "/promociones" },
   { label: "Visita", href: "/visita" },
 ];
