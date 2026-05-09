@@ -3,15 +3,34 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { LogOut, Image as ImageIcon, Tag, Store, LayoutDashboard, Mail } from "lucide-react";
+import { 
+  LogOut, 
+  Image as ImageIcon, 
+  Tag, 
+  Store, 
+  LayoutDashboard, 
+  Mail, 
+  Sparkles, 
+  Settings, 
+  Newspaper, 
+  Calendar,
+  Users,
+  Ticket
+} from "lucide-react";
+import { InstagramIcon } from "@/src/components/Icons";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/banners", label: "Banners", icon: ImageIcon },
+  { href: "/admin/hero", label: "Carrusel Hero", icon: Sparkles },
+  { href: "/admin/banners", label: "Banners Promos", icon: ImageIcon },
   { href: "/admin/brands", label: "Marcas", icon: Store },
   { href: "/admin/categories", label: "Categorías", icon: Tag },
-  { href: "/admin/promotions", label: "Promociones", icon: Tag },
-  { href: "/admin/subscribers", label: "Suscriptores", icon: Mail },
+  { href: "/admin/promotions", label: "Promociones", icon: Ticket },
+  { href: "/admin/news", label: "Noticias", icon: Newspaper },
+  { href: "/admin/agenda", label: "Agenda", icon: Calendar },
+  { href: "/admin/instagram", label: "Instagram Feed", icon: InstagramIcon },
+  { href: "/admin/settings", label: "Configuración", icon: Settings },
+  { href: "/admin/subscribers", label: "Suscriptores", icon: Users },
 ];
 
 export default function AdminSidebar() {

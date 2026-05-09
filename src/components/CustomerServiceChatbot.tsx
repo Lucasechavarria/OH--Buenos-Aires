@@ -21,6 +21,11 @@ export default function CustomerServiceChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
 
+  // Hide chatbot on admin routes
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   const { data: brands = [] } = useQuery({
     queryKey: ['brands'],
     queryFn: getBrands,

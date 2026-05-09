@@ -1,12 +1,13 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/src/features/catalog/components/Header";
 import ContactSection from "@/src/components/ContactSection";
-import { ChevronLeft, X, Calendar, ArrowRight, Utensils, Star, Smartphone } from "lucide-react";
+import { ChevronLeft, X, Calendar, ArrowRight, Utensils, Star, Smartphone, ImageIcon } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 interface NewsItem {
   id: string;
@@ -14,58 +15,39 @@ interface NewsItem {
   excerpt: string;
   content: string;
   date: string;
-  image: string;
+  image_url: string;
   category: string;
-  icon: React.ReactNode;
+  active: boolean;
 }
 
-const NEWS_DATA: NewsItem[] = [
-  {
-    id: "marcas-lujo",
-    title: "Confirmado: Nuevas Firmas de Lujo se Unen a Oh!",
-    excerpt: "Las casas de moda más prestigiosas del mundo eligen Recoleta para sus nuevas tiendas flagship.",
-    content: `
-      <p>Nos enorgullece anunciar que Oh! Buenos Aires ha sido seleccionado como el hogar exclusivo de nuevas marcas internacionales de primer nivel. Estas confirmaciones consolidan nuestro compromiso de ofrecer una experiencia de retail sin precedentes en Argentina.</p>
-      <p>Las nuevas boutiques no solo traerán sus últimas colecciones, sino que también presentarán diseños arquitectónicos únicos que respetan el espíritu de nuestro icónico edificio en Recoleta. Desde alta costura hasta joyería fina, la selección ha sido curada para satisfacer los gustos más sofisticados.</p>
-      <p>Prepárate para redescubrir el lujo. Muy pronto revelaremos los nombres de las casas que cambiarán el panorama de la moda en la ciudad.</p>
-    `,
-    date: "18 ABRE 2026",
-    image: "/happy-woman-shopping-bag-retail-fashion-package-as-customer-commerce-luxury-products-with-discount-sale-smile-friends-clothes-spending-money-client-commercial-goods-store-768x461.jpg",
-    category: "RETAIL DE ALTO NIVEL",
-    icon: <Star className="w-4 h-4" />
-  },
-  {
-    id: "gastronomia-gourmet",
-    title: "Un Viaje Sensorial: Nuestra Nueva Propuesta Gastronómica",
-    excerpt: "Sabores internacionales y ambientes de ensueño te esperan en nuestro nuevo polo gourmet.",
-    content: `
-      <p>La gastronomía en Oh! Buenos Aires evoluciona. Estamos diseñando un espacio donde cada comida es una celebración de los sentidos. Desde bistrós franceses hasta sushi de autor, la variedad será el sello distintivo de nuestra propuesta.</p>
-      <p>Nuestras terrazas y jardines de invierno ofrecerán el entorno perfecto para almuerzos de negocios, meriendas entre amigas o cenas románticas bajo las estrellas de Recoleta. La curaduría de chefs locales e internacionales asegura una calidad excepcional en cada plato.</p>
-      <p>Te esperamos para vivir momentos inolvidables donde el buen comer se encuentra con el diseño de vanguardia.</p>
-    `,
-    date: "15 ABRE 2026",
-    image: "/img2-300x200.png",
-    category: "GASTRONOMÍA",
-    icon: <Utensils className="w-4 h-4" />
-  },
-  {
-    id: "sistema-beneficios",
-    title: "Beneficios Oh!: Exclusividad en tu Smartphone",
-    excerpt: "Lanzamos nuestro sistema inteligente de cupones y accesos VIP para una experiencia de shopping sin fricciones.",
-    content: `
-      <p>La tecnología y la exclusividad se unen en nuestro nuevo sistema de beneficios. Ahora, acceder a preventas, descuentos especiales y eventos privados es más fácil que nunca.</p>
-      <p>A través de nuestra plataforma, podrás descargar cupones personalizados directamente a tu teléfono. Al presentarlos en nuestros locales, accederás a una atención preferencial y beneficios diseñados exclusivamente para nuestra comunidad.</p>
-      <p>Queremos que cada visita sea especial. Con este sistema, la exclusividad te acompaña en todo momento.</p>
-    `,
-    date: "10 ABRE 2026",
-    image: "/three-womans-with-shopping-bags-taking-selfie-with-their-smartphone-300x200.jpg",
-    category: "EXPERIENCIA SMART",
-    icon: <Smartphone className="w-4 h-4" />
-  }
-];
+const CategoryIcon = ({ category }: { category: string }) => {
+  const c = category.toLowerCase();
+  if (c.includes('gastronom')) return <Utensils className="w-4 h-4" />;
+  if (c.includes('smart') || c.includes('tecn')) return <Smartphone className="w-4 h-4" />;
+  return <Star className="w-4 h-4" />;
+};
 
 export default function NewsPage() {
+  const [newsList, setNewsList] = useState<NewsItem[]>([]);
   const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      const { data, error } = await supabase
+        .from("news")
+        .select("*")
+        .eq("active", true)
+        .order("date", { ascending: false });
+      
+      if (!error && data) {
+        setNewsList(data);
+      }
+      setLoading(false);
+    };
+
+    fetchNews();
+  }, []);
 
   return (
     <main className="min-h-screen bg-alabaster selection:bg-celeste-oh selection:text-white">
@@ -97,48 +79,65 @@ export default function NewsPage() {
 
       {/* News Grid */}
       <section className="py-24 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {NEWS_DATA.map((news, index) => (
-            <motion.div
-              key={news.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              onClick={() => setSelectedNews(news)}
-              className="group cursor-pointer bg-white rounded-3xl overflow-hidden border border-celeste-oh/10 hover:border-celeste-oh/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
-            >
-              <div className="relative h-72 md:h-80 w-full overflow-hidden">
-                <img 
-                  src={news.image} 
-                  alt={news.title}
-                  className="w-full h-full object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110"
-                />
-                <div className="absolute top-6 left-6 px-4 py-2 bg-onyx/80 backdrop-blur-md border border-celeste-oh/30 rounded-full flex items-center gap-2">
-                   <div className="text-celeste-oh">{news.icon}</div>
-                   <span className="text-[9px] font-bold text-white uppercase tracking-widest">{news.category}</span>
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-celeste-oh"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {newsList.map((news, index) => (
+              <motion.div
+                key={news.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                onClick={() => setSelectedNews(news)}
+                className="group cursor-pointer bg-white rounded-3xl overflow-hidden border border-celeste-oh/10 hover:border-celeste-oh/40 shadow-sm hover:shadow-2xl transition-all duration-700 flex flex-col h-full"
+              >
+                <div className="relative h-72 md:h-80 w-full overflow-hidden">
+                  {news.image_url ? (
+                    <img 
+                      src={news.image_url} 
+                      alt={news.title}
+                      className="w-full h-full object-cover transition-transform duration-[2000ms] ease-out group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-onyx flex items-center justify-center text-white/10">
+                      <ImageIcon className="w-12 h-12" />
+                    </div>
+                  )}
+                  <div className="absolute top-6 left-6 px-4 py-2 bg-onyx/80 backdrop-blur-md border border-celeste-oh/30 rounded-full flex items-center gap-2">
+                     <div className="text-celeste-oh"><CategoryIcon category={news.category} /></div>
+                     <span className="text-[9px] font-bold text-white uppercase tracking-widest">{news.category}</span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-10 flex flex-col flex-1">
-                <div className="flex items-center gap-2 text-[10px] text-onyx/40 font-bold uppercase tracking-widest mb-4">
-                  <Calendar className="w-3.5 h-3.5" />
-                  {news.date}
+                <div className="p-10 flex flex-col flex-1">
+                  <div className="flex items-center gap-2 text-[10px] text-onyx/40 font-bold uppercase tracking-widest mb-4">
+                    <Calendar className="w-3.5 h-3.5" />
+                    {news.date}
+                  </div>
+                  <h3 className="text-3xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors duration-500 leading-tight">
+                    {news.title}
+                  </h3>
+                  <p className="text-onyx/60 text-sm leading-relaxed mb-8 flex-1">
+                    {news.excerpt}
+                  </p>
+                  <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-celeste-oh">
+                    <span>Leer Crónica</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </div>
                 </div>
-                <h3 className="text-3xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors duration-500 leading-tight">
-                  {news.title}
-                </h3>
-                <p className="text-onyx/60 text-sm leading-relaxed mb-8 flex-1">
-                  {news.excerpt}
-                </p>
-                <div className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.4em] text-celeste-oh">
-                  <span>Leer Crónica</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+        {!loading && newsList.length === 0 && (
+          <div className="text-center py-20 text-onyx/20 font-serif italic text-2xl">
+            No hay noticias disponibles en este momento.
+          </div>
+        )}
       </section>
 
       {/* Modal - Reader Experience */}
@@ -166,13 +165,19 @@ export default function NewsPage() {
               </button>
 
               <div className="h-96 w-full relative">
-                 <img src={selectedNews.image} alt={selectedNews.title} className="w-full h-full object-cover" />
+                 {selectedNews.image_url ? (
+                   <img src={selectedNews.image_url} alt={selectedNews.title} className="w-full h-full object-cover" />
+                 ) : (
+                   <div className="w-full h-full bg-onyx flex items-center justify-center text-white/10">
+                     <ImageIcon className="w-20 h-20" />
+                   </div>
+                 )}
                  <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
               </div>
 
               <div className="p-8 md:p-16 -mt-20 relative bg-white rounded-t-[3rem]">
                 <div className="flex items-center gap-3 text-[11px] text-celeste-oh font-bold uppercase tracking-[0.3em] mb-6">
-                   <div className="p-2 rounded-full bg-celeste-oh/10">{selectedNews.icon}</div>
+                   <div className="p-2 rounded-full bg-celeste-oh/10"><CategoryIcon category={selectedNews.category} /></div>
                    <span>{selectedNews.category} • {selectedNews.date}</span>
                 </div>
                 

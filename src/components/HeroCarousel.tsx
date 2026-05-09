@@ -2,26 +2,38 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const HERO_IMAGES = [
-  "/assets/hero/architecture.jpg",
-  "/assets/hero/lifestyle-1.jpg",
-  "/assets/hero/lifestyle-2.jpg",
-  "/assets/hero/Shopping.webp",
-  "/assets/hero/Shopping1.webp",
-  "/assets/hero/Shopping2.webp",
-  "/assets/hero/Shopping3.webp",
-];
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 export default function HeroCarousel() {
+  const [images, setImages] = useState<any[]>([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 6000); // Cambio cada 6 segundos
-    return () => clearInterval(timer);
+    const fetchHero = async () => {
+      const { data, error } = await supabase
+        .from("hero_images")
+        .select("*")
+        .eq("active", true)
+        .order("order_index", { ascending: true });
+      
+      if (!error && data && data.length > 0) {
+        setImages(data);
+      }
+    };
+    fetchHero();
   }, []);
+
+  useEffect(() => {
+    if (images.length === 0) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length);
+    }, 6000); 
+    return () => clearInterval(timer);
+  }, [images]);
+
+  if (images.length === 0) return (
+    <div className="absolute inset-0 bg-onyx" />
+  );
 
   return (
     <div className="absolute inset-0 z-0 overflow-hidden">
@@ -38,8 +50,8 @@ export default function HeroCarousel() {
           className="absolute inset-0"
         >
           <img
-            src={HERO_IMAGES[index]}
-            alt="Oh! Buenos Aires Experience"
+            src={images[index].image_url}
+            alt={images[index].title || "Oh! Buenos Aires Experience"}
             className="w-full h-full object-cover grayscale-[20%]"
           />
         </motion.div>

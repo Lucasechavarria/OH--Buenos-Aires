@@ -5,9 +5,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const NAV_ITEMS = [
+  { label: "INICIO", href: "/" },
   { label: "Marcas", href: "/marcas" },
   { label: "Gastronomía", href: "/gastronomia" },
-  { label: "Agenda", href: "/agenda" },
+  { label: "Novedades", href: "/novedades" },
   { label: "Promociones", href: "/promociones" },
   { label: "Visita", href: "/visita" },
 ];
