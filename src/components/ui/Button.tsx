@@ -20,7 +20,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button";
     
     const variants = {
-      primary: "bg-brand-accent text-white hover:opacity-90",
+      primary: "bg-brand-accent text-white hover:opacity-90 text-shadow-hero",
       outline: "border border-celeste-oh text-celeste-oh hover:bg-celeste-oh/5",
       ghost: "text-onyx hover:bg-onyx/5",
     };

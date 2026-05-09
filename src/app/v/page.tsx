@@ -130,7 +130,7 @@ function ValidationContent() {
               <button
                 onClick={handleRedeem}
                 disabled={redeeming}
-                className="w-full h-16 bg-brand-accent text-white font-bold uppercase tracking-[0.3em] text-[11px] rounded-2xl shadow-xl shadow-celeste-oh/20 hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                className="w-full h-16 bg-brand-accent text-white text-shadow-hero font-bold uppercase tracking-[0.3em] text-[11px] rounded-2xl shadow-xl shadow-celeste-oh/20 hover:scale-105 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
               >
                 {redeeming ? "Procesando..." : "Marcar como Canjeado"}
               </button>
