@@ -11,7 +11,8 @@ export default function MarketingSplash() {
     lastName: "",
     phone: "",
     email: "",
-    birthDate: ""
+    birthDate: "",
+    website: "" // Honeypot field
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -41,6 +42,15 @@ export default function MarketingSplash() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Honeypot check: if filled, it's a bot.
+    if (formData.website) {
+      console.warn("Spam detected");
+      setSubmitted(true);
+      setTimeout(() => setShow(false), 2000);
+      return;
+    }
+
     if (!formData.firstName.trim() || !formData.email.trim() || !formData.lastName.trim() || !formData.phone.trim() || !formData.birthDate) return;
 
     setIsSubmitting(true);
@@ -170,6 +180,18 @@ export default function MarketingSplash() {
                   onChange={handleChange}
                   className="w-full bg-white/5 border border-alabaster/10 rounded-xl px-4 py-3 text-sm font-sans text-alabaster focus:outline-none focus:border-celeste-oh transition-colors placeholder:text-alabaster/20"
                   placeholder="ejemplo@correo.com"
+                />
+              </div>
+
+              {/* Honeypot field - Hidden from users */}
+              <div className="hidden" aria-hidden="true">
+                <input 
+                  type="text" 
+                  name="website" 
+                  tabIndex={-1}
+                  value={formData.website}
+                  onChange={handleChange}
+                  autoComplete="off"
                 />
               </div>
               

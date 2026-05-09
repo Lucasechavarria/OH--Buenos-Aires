@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import { Save, Settings, Phone, MapPin, Mail, Globe, ShieldCheck, Plus, Trash2, Edit } from "lucide-react";
+import HelpTooltip from "../components/HelpTooltip";
 import { InstagramIcon, LinkedinIcon } from "@/src/components/Icons";
 
 export default function SettingsAdmin() {
@@ -13,6 +14,14 @@ export default function SettingsAdmin() {
 
   // Form states for settings
   const [formValues, setFormValues] = useState<Record<string, string>>({});
+  
+  // Form states for services
+  const [editingServiceId, setEditingServiceId] = useState<string | null>(null);
+  const [serviceForm, setServiceForm] = useState({
+    title: "",
+    description: "",
+    icon_name: "Car"
+  });
 
   const fetchData = async () => {
     setLoading(true);
@@ -59,6 +68,31 @@ export default function SettingsAdmin() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleServiceSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      if (editingServiceId) {
+        await supabase.from("site_services").update(serviceForm).eq("id", editingServiceId);
+      } else {
+        await supabase.from("site_services").insert([serviceForm]);
+      }
+      setServiceForm({ title: "", description: "", icon_name: "Car" });
+      setEditingServiceId(null);
+      fetchData();
+    } catch (err: any) {
+      alert("Error: " + err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deleteService = async (id: string) => {
+    if (!confirm("¿Eliminar este servicio?")) return;
+    await supabase.from("site_services").delete().eq("id", id);
+    fetchData();
   };
 
   return (
@@ -131,6 +165,7 @@ export default function SettingsAdmin() {
           <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-xl">
             <h3 className="text-xl font-serif text-white mb-6 flex items-center gap-2">
               <Globe className="w-5 h-5 text-celeste-oh" /> SEO Global
+              <HelpTooltip text="Aquí puedes actualizar los datos de contacto globales y metadatos SEO. El teléfono y WhatsApp deben incluir el código de país (ej: +54)." />
             </h3>
             <div className="space-y-6">
               <div>
@@ -144,14 +179,73 @@ export default function SettingsAdmin() {
             </div>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-xl opacity-60">
+          <div className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 shadow-xl">
              <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-serif text-white flex items-center gap-2">
                   <ShieldCheck className="w-5 h-5 text-celeste-oh" /> Servicios (Visita)
+                  <HelpTooltip text="Añade o edita los servicios premium que se muestran en la página 'Visita'. Elige un icono representativo para cada uno." />
                 </h3>
-                <span className="text-[8px] font-bold uppercase tracking-widest text-alabaster/40 bg-white/5 px-2 py-1 rounded">Próximamente</span>
              </div>
-             <p className="text-sm text-alabaster/40 italic">La gestión detallada de servicios por cada local se activará en la siguiente fase.</p>
+             
+             {/* Formulario rápido de Servicio */}
+             <form onSubmit={handleServiceSubmit} className="mb-8 p-4 bg-white/5 rounded-2xl border border-white/10 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <input 
+                    placeholder="Título (Ej: Wi-Fi)" 
+                    value={serviceForm.title}
+                    onChange={e => setServiceForm({...serviceForm, title: e.target.value})}
+                    className="bg-onyx/50 border border-white/10 rounded-lg px-3 py-2 text-xs text-white" 
+                    required
+                  />
+                  <select 
+                    value={serviceForm.icon_name}
+                    onChange={e => setServiceForm({...serviceForm, icon_name: e.target.value})}
+                    className="bg-onyx/50 border border-white/10 rounded-lg px-3 py-2 text-xs text-white"
+                  >
+                    <option value="Car">Coche (Parking)</option>
+                    <option value="Wifi">Wi-Fi</option>
+                    <option value="Dog">Mascota (Pet)</option>
+                    <option value="ShieldCheck">Escudo (Seguridad)</option>
+                    <option value="Zap">Rayo (Carga EV)</option>
+                    <option value="Coffee">Café</option>
+                  </select>
+                </div>
+                <textarea 
+                  placeholder="Descripción corta..." 
+                  value={serviceForm.description}
+                  onChange={e => setServiceForm({...serviceForm, description: e.target.value})}
+                  className="w-full bg-onyx/50 border border-white/10 rounded-lg px-3 py-2 text-xs text-white h-20 resize-none"
+                />
+                <div className="flex gap-2">
+                  <button type="submit" className="flex-1 py-2 bg-celeste-oh text-onyx rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                    {editingServiceId ? "Actualizar" : "Añadir Servicio"}
+                  </button>
+                  {editingServiceId && (
+                    <button type="button" onClick={() => {setEditingServiceId(null); setServiceForm({title:"", description:"", icon_name:"Car"});}} className="px-4 py-2 bg-white/5 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest">
+                      X
+                    </button>
+                  )}
+                </div>
+             </form>
+
+             <div className="space-y-4">
+               {services.map(s => (
+                 <div key={s.id} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5 group">
+                   <div>
+                     <p className="text-white font-bold text-sm">{s.title}</p>
+                     <p className="text-[10px] text-alabaster/40 italic">{s.icon_name}</p>
+                   </div>
+                   <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button onClick={() => {setEditingServiceId(s.id); setServiceForm({title: s.title, description: s.description, icon_name: s.icon_name});}} className="p-2 text-celeste-oh hover:bg-white/5 rounded-lg">
+                        <Edit className="w-3.5 h-3.5" />
+                      </button>
+                      <button onClick={() => deleteService(s.id)} className="p-2 text-red-400 hover:bg-white/5 rounded-lg">
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                   </div>
+                 </div>
+               ))}
+             </div>
           </div>
         </div>
       </div>

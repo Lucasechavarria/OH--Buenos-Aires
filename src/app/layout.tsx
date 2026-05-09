@@ -1,35 +1,48 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from "./providers";
-
-export const metadata: Metadata = {
-  title: {
-    default: "Oh! Buenos Aires | Luxury Shopping Experience",
-    template: "%s | Oh! Buenos Aires"
-  },
-  description: "El epicentro del Luxury Shopping en Recoleta. Descubrí boutiques internacionales, gastronomía de autor y experiencias exclusivas en Buenos Aires.",
-  keywords: ["Shopping", "Luxury", "Buenos Aires", "Recoleta", "Moda", "Gastronomía", "Experiencias", "Boutiques"],
-  authors: [{ name: "LDE-System" }],
-  openGraph: {
-    type: "website",
-    locale: "es_AR",
-    url: "https://ohbuenosaires.com",
-    title: "Oh! Buenos Aires | Luxury Shopping Experience",
-    description: "Viví la exclusividad en el corazón de Recoleta. Marcas internacionales y gastronomía gourmet.",
-    siteName: "Oh! Buenos Aires",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Oh! Buenos Aires | Luxury Shopping",
-    description: "Descubrí el shopping más exclusivo de Recoleta.",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  }
-};
-
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import CustomerServiceChatbot from "@/src/components/CustomerServiceChatbot";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { data: settings } = await supabase
+    .from("site_settings")
+    .select("key, value");
+
+  const s = (settings || []).reduce((acc: any, item) => {
+    acc[item.key] = item.value;
+    return acc;
+  }, {});
+
+  const title = s.site_title || "Oh! Buenos Aires | Luxury Shopping Experience";
+  const description = s.site_description || "El epicentro del Luxury Shopping en Recoleta. Descubrí boutiques internacionales, gastronomía de autor y experiencias exclusivas.";
+
+  return {
+    title: {
+      default: title,
+      template: `%s | ${title.split('|')[0].trim()}`
+    },
+    description: description,
+    keywords: ["Shopping", "Luxury", "Buenos Aires", "Recoleta", "Moda", "Gastronomía"],
+    authors: [{ name: "LDE-System" }],
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      locale: "es_AR",
+      siteName: "Oh! Buenos Aires",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+    },
+    robots: {
+      index: true,
+      follow: true,
+    }
+  };
+}
 
 export default function RootLayout({
   children,

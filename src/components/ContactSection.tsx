@@ -3,28 +3,15 @@
 import { useState, useEffect } from "react";
 import { Mail, Send, Phone, MapPin, AlertCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { useSettings } from "@/src/hooks/useSettings";
 
 export default function ContactSection() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const { data: settings = {} } = useSettings();
+  const [formData, setFormData] = useState({ name: "", email: "", phone: "", message: "", subject: "" });
   const [errors, setErrors] = useState({ name: false, email: false, message: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [contactInfo, setContactInfo] = useState({ phone: "+54 11 4000 0000", address: "Av Pueyrredon y Azcuenaga" });
 
-  useEffect(() => {
-    const fetchSettings = async () => {
-      const { data } = await supabase.from("site_settings").select("key, value");
-      if (data) {
-        const phone = data.find(s => s.key === 'contact_phone')?.value;
-        const address = data.find(s => s.key === 'contact_address')?.value;
-        setContactInfo({
-          phone: phone || "+54 11 4000 0000",
-          address: address || "Av Pueyrredon y Azcuenaga"
-        });
-      }
-    };
-    fetchSettings();
-  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -44,18 +31,43 @@ export default function ContactSection() {
     return !Object.values(newErrors).some(Boolean);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Honeypot check
+    if (formData.subject) {
+      console.warn("Spam blocked");
+      setSubmitted(true);
+      return;
+    }
+
     if (!validate()) return;
     
     setIsSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    try {
+      const { error } = await supabase
+        .from("contact_messages")
+        .insert([
+          { 
+            name: formData.name.trim(), 
+            email: formData.email.trim(), 
+            phone: formData.phone.trim(),
+            message: formData.message.trim() 
+          }
+        ]);
+
+      if (error) throw error;
+
       setSubmitted(true);
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", phone: "", message: "", subject: "" });
       setTimeout(() => setSubmitted(false), 8000);
-    }, 1500);
+    } catch (err: any) {
+      console.error("Error sending message:", err);
+      alert("Hubo un problema al enviar tu mensaje. Por favor intenta nuevamente.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -85,7 +97,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Teléfono</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{contactInfo.phone}</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{settings.contact_phone || "+54 11 4000 0000"}</p>
                 </div>
               </div>
               
@@ -96,7 +108,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Ubicación</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{contactInfo.address}</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{settings.contact_address || "Av Pueyrredon y Azcuenaga"}</p>
                 </div>
               </div>
             </div>
@@ -129,19 +141,34 @@ export default function ContactSection() {
                     {errors.name && <AlertCircle className="absolute right-0 bottom-3 w-4 h-4 text-red-500" />}
                   </div>
 
-                  <div className="group/input relative">
-                    <label htmlFor="email" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.email ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-celeste-oh'}`}>
-                      Correo Electrónico
-                    </label>
-                    <input 
-                      type="email" 
-                      id="email" 
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.email ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10'}`}
-                      placeholder="maria@ejemplo.com"
-                    />
-                    {errors.email && <AlertCircle className="absolute right-0 bottom-3 w-4 h-4 text-red-500" />}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="group/input relative">
+                      <label htmlFor="email" className={`block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 transition-colors ${errors.email ? 'text-red-500' : 'text-alabaster/40 group-focus-within/input:text-celeste-oh'}`}>
+                        Correo Electrónico
+                      </label>
+                      <input 
+                        type="email" 
+                        id="email" 
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={`w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster ${errors.email ? 'border-red-500/50 placeholder:text-red-500/30' : 'border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10'}`}
+                        placeholder="maria@ejemplo.com"
+                      />
+                      {errors.email && <AlertCircle className="absolute right-0 bottom-3 w-4 h-4 text-red-500" />}
+                    </div>
+                    <div className="group/input relative">
+                      <label htmlFor="phone" className="block text-[10px] uppercase tracking-[0.2em] font-bold mb-2 text-alabaster/40 group-focus-within/input:text-celeste-oh transition-colors">
+                        Teléfono (Opcional)
+                      </label>
+                      <input 
+                        type="tel" 
+                        id="phone" 
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full bg-transparent border-b py-3 text-sm focus:outline-none transition-colors font-sans text-alabaster border-alabaster/20 focus:border-celeste-oh placeholder:text-alabaster/10"
+                        placeholder="+54 11 ..."
+                      />
+                    </div>
                   </div>
 
                   <div className="group/input relative">
@@ -157,6 +184,18 @@ export default function ContactSection() {
                       placeholder="En qué le podemos ayudar..."
                     />
                     {errors.message && <AlertCircle className="absolute right-2 bottom-4 w-4 h-4 text-red-500" />}
+                  </div>
+
+                  {/* Honeypot field */}
+                  <div className="hidden" aria-hidden="true">
+                    <input 
+                      type="text" 
+                      id="subject" 
+                      tabIndex={-1}
+                      value={formData.subject}
+                      onChange={handleChange}
+                      autoComplete="off"
+                    />
                   </div>
                 </div>
 

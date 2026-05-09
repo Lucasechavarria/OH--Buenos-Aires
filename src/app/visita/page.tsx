@@ -2,17 +2,35 @@
 
 import Header from "@/src/features/catalog/components/Header";
 import { motion } from "framer-motion";
-import { Clock, MapPin, Car, Wifi, Dog, ShieldCheck, Phone, Mail, ChevronRight } from "lucide-react";
+import { Car, Wifi, Dog, ShieldCheck, MapPin, Phone, Mail, Clock, Compass, Zap, Coffee, LucideIcon, ChevronRight } from "lucide-react";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { useQuery } from "@tanstack/react-query";
+import { useSettings } from "@/src/hooks/useSettings";
 import ContactSection from "@/src/components/ContactSection";
 
-const SERVICES = [
-  { icon: Car, title: "Estacionamiento", desc: "Servicio de Valet Parking y 3 niveles de parking subterráneo." },
-  { icon: Wifi, title: "Wi-Fi High Speed", desc: "Conectividad total en todas las áreas comunes y terrazas." },
-  { icon: Dog, title: "Pet Friendly", desc: "Tus compañeros de cuatro patas son bienvenidos en nuestro shopping." },
-  { icon: ShieldCheck, title: "Seguridad 24/7", desc: "Personal de seguridad y monitoreo constante para tu tranquilidad." },
-];
+const ICON_MAP: Record<string, LucideIcon> = {
+  Car,
+  Wifi,
+  Dog,
+  ShieldCheck,
+  Zap,
+  Coffee
+};
 
 export default function VisitaPage() {
+  const { data: settings = {} } = useSettings();
+  const { data: services = [], isLoading } = useQuery({
+    queryKey: ['site-services'],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("site_services")
+        .select("*")
+        .eq("active", true)
+        .order("order_index", { ascending: true });
+      return data || [];
+    },
+    staleTime: 1000 * 60 * 10,
+  });
   return (
     <main className="min-h-screen bg-alabaster selection:bg-celeste-oh selection:text-white">
       <Header />
@@ -63,7 +81,7 @@ export default function VisitaPage() {
                   <MapPin className="w-6 h-6 text-celeste-oh shrink-0 mt-1" />
                   <div>
                     <p className="text-sm font-bold uppercase tracking-widest text-onyx/40 mb-1">Dirección</p>
-                    <p className="text-lg text-onyx font-medium">Av Pueyrredón y Azcuénaga, Recoleta</p>
+                    <p className="text-lg text-onyx font-medium">{settings.contact_address || "Av Pueyrredón y Azcuénaga, Recoleta"}</p>
                     <p className="text-sm text-onyx/60">Ciudad Autónoma de Buenos Aires, Argentina</p>
                   </div>
                 </div>
@@ -71,14 +89,14 @@ export default function VisitaPage() {
                   <Phone className="w-6 h-6 text-celeste-oh shrink-0 mt-1" />
                   <div>
                     <p className="text-sm font-bold uppercase tracking-widest text-onyx/40 mb-1">Contacto</p>
-                    <p className="text-lg text-onyx font-medium">+54 11 4000 0000</p>
+                    <p className="text-lg text-onyx font-medium">{settings.contact_phone || "+54 11 4000 0000"}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Mail className="w-6 h-6 text-celeste-oh shrink-0 mt-1" />
                   <div>
                     <p className="text-sm font-bold uppercase tracking-widest text-onyx/40 mb-1">Email</p>
-                    <p className="text-lg text-onyx font-medium">info@ohbuenosaires.com</p>
+                    <p className="text-lg text-onyx font-medium">{settings.contact_email || "info@ohbuenosaires.com"}</p>
                   </div>
                 </div>
               </div>
@@ -128,21 +146,26 @@ export default function VisitaPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {SERVICES.map((svc, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1 }}
-                className="p-8 rounded-3xl bg-white/5 border border-white/10 hover:border-celeste-oh/50 transition-all group"
-              >
-                <div className="h-14 w-14 rounded-2xl bg-celeste-oh/10 flex items-center justify-center mb-6 group-hover:bg-celeste-oh/20 transition-colors">
-                  <svc.icon className="h-6 w-6 text-celeste-oh" />
-                </div>
-                <h4 className="text-lg font-serif mb-3">{svc.title}</h4>
-                <p className="text-alabaster/40 text-sm leading-relaxed">{svc.desc}</p>
-              </motion.div>
-            ))}
+            {isLoading ? (
+              [1,2,3,4].map(i => (
+                <div key={i} className="h-48 bg-white/5 rounded-3xl animate-pulse" />
+              ))
+            ) : services.map((service: any) => {
+              const IconComponent = ICON_MAP[service.icon_name] || Compass;
+              return (
+                <motion.div 
+                  key={service.id}
+                  whileHover={{ y: -10 }}
+                  className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/5 hover:border-celeste-oh/30 transition-all text-center group"
+                >
+                  <div className="h-16 w-16 bg-onyx rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/10 group-hover:border-celeste-oh/50 transition-colors shadow-xl">
+                    <IconComponent className="h-8 w-8 text-celeste-oh" />
+                  </div>
+                  <h3 className="text-xl font-serif text-white mb-3">{service.title}</h3>
+                  <p className="text-alabaster/40 text-sm leading-relaxed">{service.description}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

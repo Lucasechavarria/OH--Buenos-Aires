@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Header from "@/src/features/catalog/components/Header";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, MapPin, Clock, ArrowRight, Sparkles, Newspaper, CalendarDays, ImageIcon } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowRight, Sparkles, Newspaper, CalendarDays, ImageIcon, X, ChevronLeft, Star, Utensils, Smartphone } from "lucide-react";
+import Link from "next/link";
 import ContactSection from "@/src/components/ContactSection";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
@@ -11,6 +12,7 @@ interface NewsItem {
   id: string;
   title: string;
   excerpt: string;
+  content: string; // Añadido para el lector modal
   image_url: string;
   category: string;
   date: string;
@@ -29,6 +31,7 @@ interface EventItem {
 
 export default function NovedadesPage() {
   const [activeTab, setActiveTab] = useState<"news" | "events">("news");
+  const [selectedNews, setSelectedNews] = useState<NewsItem | null>(null); // Estado para el modal
   const [news, setNews] = useState<NewsItem[]>([]);
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -122,6 +125,7 @@ export default function NovedadesPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
+                      onClick={() => setSelectedNews(item)}
                       className="group cursor-pointer"
                     >
                       <div className="relative aspect-[16/10] rounded-3xl overflow-hidden mb-8 shadow-2xl">
@@ -220,6 +224,68 @@ export default function NovedadesPage() {
           )}
         </div>
       </section>
+
+      {/* Modal - Reader Experience (Importado de /news) */}
+      <AnimatePresence>
+        {selectedNews && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-10 bg-onyx/90 backdrop-blur-xl"
+            onClick={() => setSelectedNews(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 50 }}
+              className="bg-white w-full max-w-4xl max-h-full overflow-y-auto rounded-3xl shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] relative custom-scrollbar"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                onClick={() => setSelectedNews(null)}
+                className="absolute top-6 right-6 z-10 p-3 bg-onyx text-white rounded-full hover:bg-brand-accent transition-colors shadow-xl"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              <div className="h-96 w-full relative">
+                 {selectedNews.image_url ? (
+                   <img src={selectedNews.image_url} alt={selectedNews.title} className="w-full h-full object-cover" />
+                 ) : (
+                   <div className="w-full h-full bg-onyx flex items-center justify-center text-white/10">
+                     <ImageIcon className="w-20 h-20" />
+                   </div>
+                 )}
+                 <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent" />
+              </div>
+
+              <div className="p-8 md:p-16 -mt-20 relative bg-white rounded-t-[3rem]">
+                <div className="flex items-center gap-3 text-[11px] text-celeste-oh font-bold uppercase tracking-[0.3em] mb-6">
+                   <div className="p-2 rounded-full bg-celeste-oh/10"><Star className="w-4 h-4" /></div>
+                   <span>{selectedNews.category} • {new Date(selectedNews.date).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-6xl font-serif text-onyx mb-10 leading-[1.1]">
+                  {selectedNews.title}
+                </h2>
+
+                <div 
+                  className="prose prose-onyx max-w-none text-onyx/70 text-lg leading-relaxed space-y-6 font-medium"
+                  dangerouslySetInnerHTML={{ __html: selectedNews.content }}
+                />
+
+                <div className="mt-16 pt-10 border-t border-onyx/5 flex flex-col md:flex-row items-center justify-between gap-6">
+                   <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-onyx/40">Visítanos en Oh! Buenos Aires</p>
+                   <button onClick={() => setSelectedNews(null)} className="h-14 px-10 flex items-center justify-center bg-brand-accent text-white text-[10px] font-bold uppercase tracking-[0.4em] rounded-full hover:opacity-90 transition-all">
+                      Cerrar Lectura
+                   </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <ContactSection />
     </main>

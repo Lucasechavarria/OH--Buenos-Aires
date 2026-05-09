@@ -1,3 +1,5 @@
+"use client";
+
 import * as motion from "framer-motion/client";
 import Header from "@/src/features/catalog/components/Header";
 
@@ -9,6 +11,7 @@ import LatestNewsSnippet from "@/src/components/LatestNewsSnippet";
 import Link from "next/link";
 import InstagramFeed from "@/src/components/InstagramFeed";
 import HeroCarousel from "@/src/components/HeroCarousel";
+import { useSettings } from "@/src/hooks/useSettings";
 
 
 const InstagramIcon = () => (
@@ -28,6 +31,8 @@ const LinkedinIcon = () => (
 );
 
 export default function Home() {
+  const { data: settings = {} } = useSettings();
+
   return (
     <main className="min-h-screen selection:bg-celeste-oh selection:text-white">
       <MarketingSplash />
@@ -90,7 +95,7 @@ export default function Home() {
             Visitanos en Recoleta
           </h4>
           <a 
-            href="https://maps.app.goo.gl/8Z1QYSy1anWy5jY96" 
+            href={settings.social_google_maps || "https://maps.app.goo.gl/8Z1QYSy1anWy5jY96"} 
             target="_blank" 
             rel="noopener noreferrer"
             className="group flex flex-col sm:flex-row items-center justify-center gap-3 text-onyx/60 hover:text-celeste-oh transition-colors text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.4em] sm:tracking-[0.6em] mb-12 font-sans relative"
@@ -98,13 +103,13 @@ export default function Home() {
             <div className="bg-celeste-oh/10 p-2 rounded-full group-hover:bg-celeste-oh/20 transition-all duration-300">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
             </div>
-            <span className="mt-1">Av Pueyrredon y Azcuenaga, Buenos Aires</span>
+            <span className="mt-1">{settings.contact_address || "Av Pueyrredon y Azcuenaga, Buenos Aires"}</span>
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-celeste-oh group-hover:w-full transition-all duration-700" />
           </a>
           
           <div className="flex items-center gap-10 mb-12">
             <a 
-              href="https://www.instagram.com/oh_buenosaires" 
+              href={settings.social_instagram || "https://www.instagram.com/oh_buenosaires"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="group flex flex-col items-center gap-3 transition-all"
@@ -116,7 +121,7 @@ export default function Home() {
             </a>
 
             <a 
-              href="https://www.linkedin.com/company/ohbuenosaires" 
+              href={settings.social_linkedin || "https://www.linkedin.com/company/ohbuenosaires"} 
               target="_blank" 
               rel="noopener noreferrer"
               className="group flex flex-col items-center gap-3 transition-all"
