@@ -1,3 +1,8 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import { useQuery } from "@tanstack/react-query";
 
 export default function HeroCarousel() {
@@ -20,7 +25,7 @@ export default function HeroCarousel() {
   useEffect(() => {
     if (images.length === 0) return;
     const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
+      setIndex((prev: number) => (prev + 1) % images.length);
     }, 6000); 
     return () => clearInterval(timer);
   }, [images]);

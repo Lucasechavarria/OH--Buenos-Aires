@@ -1,3 +1,7 @@
+"use client";
+
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 
 export default function BannersSlider() {
@@ -37,7 +41,7 @@ export default function BannersSlider() {
         </header>
 
         <div className="flex gap-8 overflow-x-auto snap-x snap-mandatory pb-10 scrollbar-hide">
-          {banners.map(banner => (
+          {banners.map((banner: any) => (
             <motion.a 
               key={banner.id} 
               href={banner.link_url || '#'} 

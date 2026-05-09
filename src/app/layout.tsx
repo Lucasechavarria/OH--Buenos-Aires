@@ -1,4 +1,8 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import Providers from "./providers";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
+import CustomerServiceChatbot from "@/src/components/CustomerServiceChatbot";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await supabase
@@ -39,8 +43,6 @@ export async function generateMetadata(): Promise<Metadata> {
     }
   };
 }
-
-import CustomerServiceChatbot from "@/src/components/CustomerServiceChatbot";
 
 export default function RootLayout({
   children,

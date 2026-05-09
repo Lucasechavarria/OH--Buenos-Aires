@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import { useQuery } from "@tanstack/react-query";
 
 import { InstagramIcon } from "@/src/components/Icons";
@@ -44,7 +48,7 @@ export default function InstagramFeed() {
       {/* Marquee Container */}
       <div className="relative group overflow-hidden">
         <div className="flex gap-6 animate-marquee group-hover:pause">
-          {loading ? (
+          {isLoading ? (
             Array(8).fill(0).map((_, i) => (
               <div key={i} className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-3xl bg-onyx/5 animate-pulse" />
             ))

@@ -60,7 +60,7 @@ export default function ContactSection() {
       if (error) throw error;
 
       setSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", message: "" });
+      setFormData({ name: "", email: "", phone: "", message: "", subject: "" });
       setTimeout(() => setSubmitted(false), 8000);
     } catch (err: any) {
       console.error("Error sending message:", err);
