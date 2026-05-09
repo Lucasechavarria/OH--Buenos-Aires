@@ -71,9 +71,9 @@ export const getBotResponse = (input: string, context: BotContext): string => {
   if (query.includes("evento") || query.includes("agenda") || query.includes("hacer") || query.includes("finde") || query.includes("hoy")) {
     if (events.length > 0) {
       const eventList = events.slice(0, 3).map(e => `- ${e.title} (${e.date}) en ${e.location}`).join("\n");
-      return `Esto es lo que está pasando en OH!: \n${eventList}\n[Ver agenda completa](/agenda)`;
+      return `Esto es lo que está pasando en OH!: \n${eventList}\n[Ver agenda completa](/novedades#agenda)`;
     }
-    return "Siempre hay algo pasando en OH!. Consultá nuestra agenda de eventos aquí: [Agenda OH!](/agenda)";
+    return "Siempre hay algo pasando en OH!. Consultá nuestra agenda de eventos aquí: [Agenda OH!](/novedades#agenda)";
   }
 
   // 6. Intenciones de Negocio
