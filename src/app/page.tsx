@@ -1,3 +1,5 @@
+"use client";
+
 import * as motion from "framer-motion/client";
 import Header from "@/src/features/catalog/components/Header";
 
