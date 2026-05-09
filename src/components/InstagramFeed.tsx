@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
+
 const InstagramIcon = ({ className }: { className?: string }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
@@ -9,16 +12,26 @@ const InstagramIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
-const FEED_IMAGES = [
-  { id: 1, url: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=600" },
-  { id: 2, url: "https://images.unsplash.com/photo-1540959733332-e94e270b2d42?auto=format&fit=crop&q=80&w=600" },
-  { id: 3, url: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&q=80&w=600" },
-  { id: 4, url: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&q=80&w=600" },
-  { id: 5, url: "https://images.unsplash.com/photo-1566150905458-1bf1fd11396c?auto=format&fit=crop&q=80&w=600" },
-  { id: 6, url: "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=600" },
-];
-
 export default function InstagramFeed() {
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const { data, error } = await supabase
+        .from("instagram_posts")
+        .select("*")
+        .eq("active", true)
+        .order("order_index", { ascending: true })
+        .limit(6);
+      
+      if (!error && data) {
+        setPosts(data);
+      }
+      setLoading(false);
+    };
+    fetchPosts();
+  }, []);
   return (
     <section className="py-24 px-6 overflow-hidden bg-white">
       <div className="max-w-7xl mx-auto">
@@ -43,10 +56,10 @@ export default function InstagramFeed() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {FEED_IMAGES.map((img, idx) => (
+          {posts.length > 0 ? posts.map((img, idx) => (
             <motion.a
               key={img.id}
-              href="https://www.instagram.com/oh_buenosaires"
+              href={img.link_url || "https://www.instagram.com/oh_buenosaires"}
               target="_blank"
               rel="noopener noreferrer"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -56,15 +69,17 @@ export default function InstagramFeed() {
               className="relative aspect-square rounded-2xl overflow-hidden group shadow-xl"
             >
               <img 
-                src={img.url} 
-                alt={`Instagram feed ${img.id}`} 
+                src={img.image_url} 
+                alt="Instagram feed" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-celeste-oh/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <InstagramIcon className="h-8 w-8 text-white scale-75 group-hover:scale-100 transition-transform duration-500" />
               </div>
             </motion.a>
-          ))}
+          )) : !loading && (
+            <div className="col-span-full text-center py-10 text-onyx/20 italic">No hay posts para mostrar</div>
+          )}
         </div>
       </div>
     </section>

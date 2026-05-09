@@ -1,41 +1,44 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Header from "@/src/features/catalog/components/Header";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, Clock, ArrowRight, Sparkles } from "lucide-react";
+import { Calendar, MapPin, Clock, ArrowRight, Sparkles, ImageIcon } from "lucide-react";
 import ContactSection from "@/src/components/ContactSection";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
-const EVENTS = [
-  {
-    id: "1",
-    title: "After Office Luxury: Jazz & Cocktails",
-    date: "15 MAY",
-    time: "19:00 HS",
-    location: "Rooftop Piso 3",
-    image: "https://images.unsplash.com/photo-1514525253361-bee8a187499b?auto=format&fit=crop&q=80&w=1000",
-    category: "Música & Bebidas"
-  },
-  {
-    id: "2",
-    title: "Workshop: Tendencias Invierno 2026",
-    date: "22 MAY",
-    time: "17:00 HS",
-    location: "Main Hall",
-    image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&q=80&w=1000",
-    category: "Moda"
-  },
-  {
-    id: "3",
-    title: "Degustación: Vinos de Altura",
-    date: "05 JUN",
-    time: "20:00 HS",
-    location: "The Wine Cellar",
-    image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&q=80&w=1000",
-    category: "Gastronomía"
-  }
-];
+interface EventItem {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  category: string;
+  event_date: string;
+  event_time: string;
+  location: string;
+  active: boolean;
+}
 
 export default function AgendaPage() {
+  const [eventList, setEventList] = useState<EventItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const { data, error } = await supabase
+        .from("events")
+        .select("*")
+        .eq("active", true)
+        .order("event_date", { ascending: true });
+      
+      if (!error && data) {
+        setEventList(data);
+      }
+      setLoading(false);
+    };
+
+    fetchEvents();
+  }, []);
   return (
     <main className="min-h-screen bg-alabaster selection:bg-celeste-oh selection:text-white">
       <Header />
@@ -68,56 +71,75 @@ export default function AgendaPage() {
       {/* Events Grid */}
       <section className="py-24 px-6 lg:px-24">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {EVENTS.map((event, index) => (
-              <motion.div 
-                key={event.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="group cursor-pointer"
-              >
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden mb-8 shadow-2xl">
-                  <img 
-                    src={event.image} 
-                    alt={event.title} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-onyx/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                  
-                  <div className="absolute top-6 left-6">
-                    <div className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[9px] font-bold uppercase tracking-widest text-white">
-                      {event.category}
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-celeste-oh"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+              {eventList.map((event, index) => (
+                <motion.div 
+                  key={event.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="group cursor-pointer"
+                >
+                  <div className="relative aspect-[4/5] rounded-3xl overflow-hidden mb-8 shadow-2xl">
+                    {event.image_url ? (
+                      <img 
+                        src={event.image_url} 
+                        alt={event.title} 
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-onyx flex items-center justify-center text-white/10">
+                        <ImageIcon className="w-16 h-16" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-onyx/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                    
+                    <div className="absolute top-6 left-6">
+                      <div className="px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-[9px] font-bold uppercase tracking-widest text-white">
+                        {event.category}
+                      </div>
+                    </div>
+                    
+                    <div className="absolute bottom-8 left-8 right-8">
+                      <div className="flex items-center gap-4 text-white">
+                        <div className="text-center">
+                          <span className="block text-2xl font-serif leading-none">{event.event_date.split('-')[2]}</span>
+                          <span className="block text-[8px] font-bold uppercase tracking-tighter opacity-60">
+                            {new Date(event.event_date).toLocaleString('es-AR', { month: 'short' }).toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="h-8 w-[1px] bg-white/20" />
+                        <div>
+                          <p className="text-[10px] font-bold uppercase tracking-widest mb-1">{event.event_time}</p>
+                          <p className="text-[10px] opacity-60 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" /> {event.location}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
-                  <div className="absolute bottom-8 left-8 right-8">
-                    <div className="flex items-center gap-4 text-white">
-                      <div className="text-center">
-                        <span className="block text-2xl font-serif leading-none">{event.date.split(' ')[0]}</span>
-                        <span className="block text-[8px] font-bold uppercase tracking-tighter opacity-60">{event.date.split(' ')[1]}</span>
-                      </div>
-                      <div className="h-8 w-[1px] bg-white/20" />
-                      <div>
-                        <p className="text-[10px] font-bold uppercase tracking-widest mb-1">{event.time}</p>
-                        <p className="text-[10px] opacity-60 flex items-center gap-1">
-                          <MapPin className="w-3 h-3" /> {event.location}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <h3 className="text-2xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors">
-                  {event.title}
-                </h3>
-                <button className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-celeste-oh transition-all">
-                  <span>Ver detalles del evento</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                </button>
-              </motion.div>
-            ))}
-          </div>
+                  <h3 className="text-2xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors">
+                    {event.title}
+                  </h3>
+                  <button className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-celeste-oh transition-all">
+                    <span>Ver detalles del evento</span>
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                  </button>
+                </motion.div>
+              ))}
+            </div>
+          )}
+          {!loading && eventList.length === 0 && (
+            <div className="text-center py-20 text-onyx/20 font-serif italic text-2xl">
+              No hay eventos programados en este momento.
+            </div>
+          )}
           
           <div className="mt-24 p-12 rounded-3xl bg-onyx text-center relative overflow-hidden group">
              <div className="absolute inset-0 bg-brand-accent opacity-0 group-hover:opacity-10 transition-opacity duration-700" />

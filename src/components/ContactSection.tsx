@@ -1,13 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Mail, Send, Phone, MapPin, AlertCircle, CheckCircle2 } from "lucide-react";
+import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [errors, setErrors] = useState({ name: false, email: false, message: false });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [contactInfo, setContactInfo] = useState({ phone: "+54 11 4000 0000", address: "Av Pueyrredon y Azcuenaga" });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data } = await supabase.from("site_settings").select("key, value");
+      if (data) {
+        const phone = data.find(s => s.key === 'contact_phone')?.value;
+        const address = data.find(s => s.key === 'contact_address')?.value;
+        setContactInfo({
+          phone: phone || "+54 11 4000 0000",
+          address: address || "Av Pueyrredon y Azcuenaga"
+        });
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -68,7 +85,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Teléfono</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">+54 11 4000 0000</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{contactInfo.phone}</p>
                 </div>
               </div>
               
@@ -79,7 +96,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-alabaster/40 font-bold mb-1">Ubicación</p>
-                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">Av Pueyrredon y Azcuenaga</p>
+                  <p className="text-sm md:text-base font-medium tracking-wide group-hover:text-celeste-oh transition-colors">{contactInfo.address}</p>
                 </div>
               </div>
             </div>
