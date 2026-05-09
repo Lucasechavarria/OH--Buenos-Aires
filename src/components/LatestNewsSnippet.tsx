@@ -52,7 +52,7 @@ export default function LatestNewsSnippet() {
           ))}
           
           <div className="space-y-8 pl-0 md:pl-10">
-             <p className="text-onyx/60 text-lg leading-relaxed font-medium italic">
+             <p className="text-onyx/80 text-lg leading-relaxed font-semibold italic">
                 "Oh! Buenos Aires no es solo un destino de compras; es una narrativa en constante evolución sobre el buen vivir en el corazón de Recoleta."
              </p>
              <div className="flex gap-4">

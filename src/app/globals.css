@@ -54,6 +54,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+p {
+  font-weight: 600; /* Mayor grosor solicitado por el usuario para legibilidad */
+  -webkit-font-smoothing: antialiased;
+}
+
 /* Títulos Geométricos (Estilo Gotham) */
 h1, h2, h3, h4, .font-serif {
   font-family: var(--font-serif);
@@ -91,6 +96,14 @@ h1, h2, h3, h4, .font-serif {
 
 .border-celeste-oh {
   border-color: oklch(75% 0.08 210 / 0.3);
+}
+
+.text-shadow-hero {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 0 1px rgba(0,0,0,1);
+}
+
+.text-outline-onyx {
+  text-shadow: -0.5px -0.5px 0 #181818, 0.5px -0.5px 0 #181818, -0.5px 0.5px 0 #181818, 0.5px 0.5px 0 #181818;
 }
 
 /* Subtle Glide Animation */

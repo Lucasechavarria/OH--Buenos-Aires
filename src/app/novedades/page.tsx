@@ -162,7 +162,7 @@ export default function NovedadesPage() {
                       {new Date(item.date).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
                     </p>
                     <h3 className="text-2xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors duration-500">{item.title}</h3>
-                    <p className="text-onyx/60 text-sm leading-relaxed mb-6 line-clamp-2">{item.excerpt}</p>
+                    <p className="text-onyx/80 text-sm leading-relaxed mb-6 line-clamp-2">{item.excerpt}</p>
                     <button className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-celeste-oh transition-all">
                       <span>Leer artículo</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
