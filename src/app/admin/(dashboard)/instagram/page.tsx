@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
-import { Plus, Trash2, Edit, XCircle, CheckCircle2, Save, X, Link as LinkIcon, Sparkles, RefreshCw } from "lucide-react";
+import { Plus, Trash2, Edit, XCircle, CheckCircle2, Save, X, Link as LinkIcon, Sparkles, RefreshCw, Play } from "lucide-react";
 import { InstagramIcon } from "@/src/components/Icons";
 
 export default function InstagramAdmin() {
