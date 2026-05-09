@@ -7,6 +7,7 @@ import { useCatalogStore } from "@/src/features/catalog/store/useCatalogStore";
 import { motion } from "framer-motion";
 import { Utensils, Clock, Star, ChevronRight } from "lucide-react";
 import ContactSection from "@/src/components/ContactSection";
+import Footer from "@/src/components/Footer";
 
 export default function GastronomiaPage() {
   const { setCategory } = useCatalogStore();
@@ -69,10 +70,10 @@ export default function GastronomiaPage() {
                <Clock className="w-4 h-4 text-celeste-oh" />
                <span>Abierto hasta las 23:00</span>
              </div>
-             <div className="flex items-center gap-2">
-               <Star className="w-4 h-4 text-celeste-oh" />
-               <span>Curaduría Expert</span>
-             </div>
+              <div className="flex items-center gap-2">
+                <Star className="w-4 h-4 text-celeste-oh" />
+                <span>Selección Exclusiva</span>
+              </div>
           </div>
         </div>
 
@@ -119,11 +120,7 @@ export default function GastronomiaPage() {
 
       <ContactSection />
       
-      <footer className="py-10 px-6 border-t border-onyx/5 text-center">
-        <p className="text-onyx/40 text-[9px] font-bold uppercase tracking-[0.2em]">
-          © 2026 OH! BUENOS AIRES EXPERIENCE. TODOS LOS DERECHOS RESERVADOS.
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 }
