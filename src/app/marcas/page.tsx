@@ -60,7 +60,7 @@ export default function MarcasPage() {
       </section>
 
       {/* Catalog Section */}
-      <div className="relative -mt-10 pb-24">
+      <div className="relative pt-12 pb-24">
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={
             <div className="flex items-center justify-center py-32">
