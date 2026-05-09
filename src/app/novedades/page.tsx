@@ -6,6 +6,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Calendar, MapPin, Clock, ArrowRight, Sparkles, Newspaper, CalendarDays, ImageIcon, X, ChevronLeft, Star, Utensils, Smartphone } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "@/src/components/ContactSection";
+import Footer from "@/src/components/Footer";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 interface NewsItem {
@@ -341,6 +342,7 @@ export default function NovedadesPage() {
       </AnimatePresence>
 
       <ContactSection />
+      <Footer />
     </main>
   );
 }
