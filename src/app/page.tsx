@@ -83,6 +83,14 @@ export default function Home() {
             href={settings.social_google_maps || "https://maps.app.goo.gl/8Z1QYSy1anWy5jY96"} 
             target="_blank" 
             rel="noopener noreferrer"
+            className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.5em] text-onyx/50 hover:text-brand-accent transition-colors group"
+          >
+            <MapPin className="h-3 w-3 text-celeste-oh group-hover:scale-125 transition-transform" />
+            Cómo llegar
+          </a>
+        </div>
+      </footer>
+
       <Footer />
     </main>
   );
