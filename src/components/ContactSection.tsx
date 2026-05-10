@@ -203,7 +203,7 @@ export default function ContactSection() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting || submitted}
-                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-brand-accent text-white text-shadow-hero hover:opacity-90 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'}`}
+                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-brand-accent text-white text-shadow-hero hover:opacity-90 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 btn-liquid'}`}
                   >
                     <span className="relative z-10 flex items-center gap-3">
                       {isSubmitting ? (

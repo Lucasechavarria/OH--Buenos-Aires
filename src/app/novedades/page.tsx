@@ -262,8 +262,8 @@ export default function NovedadesPage() {
                     <p className="text-alabaster/40 text-lg md:text-xl font-sans italic max-w-2xl mx-auto mb-12">
                       Contamos con espacios exclusivos y una curaduría integral para que tu marca o celebración personal sea inolvidable en el corazón de Recoleta.
                     </p>
-                    <button className="h-16 px-12 bg-white text-onyx text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:bg-celeste-oh hover:text-white hover:scale-105 transition-all duration-500 shadow-xl">
-                      Contactar al Concierge
+                    <button className="h-16 px-12 bg-brand-accent text-white text-shadow-hero btn-liquid text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all duration-500 shadow-xl">
+                      Contacta con nosotros
                     </button>
                  </div>
                  

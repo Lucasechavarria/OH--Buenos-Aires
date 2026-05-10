@@ -48,7 +48,7 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
-              <Link href="/marcas" className="h-16 px-12 flex items-center justify-center bg-brand-accent text-white text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all duration-300 shadow-2xl shadow-premium font-sans border border-onyx/20 text-shadow-hero">
+              <Link href="/marcas" className="h-16 px-12 flex items-center justify-center bg-brand-accent text-white text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all duration-300 shadow-2xl shadow-premium font-sans border border-onyx/20 text-shadow-hero btn-liquid">
                 Explorar Marcas & Locales
               </Link>
             </div>

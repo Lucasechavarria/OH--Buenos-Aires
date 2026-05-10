@@ -198,7 +198,7 @@ export default function MarketingSplash() {
               <button 
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full h-14 mt-6 bg-brand-accent text-white font-bold uppercase tracking-[0.3em] text-[10px] rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-colors disabled:opacity-70 group text-shadow-hero"
+                className="w-full h-14 mt-6 bg-brand-accent text-white font-bold uppercase tracking-[0.3em] text-[10px] rounded-xl flex items-center justify-center gap-3 hover:opacity-90 transition-colors disabled:opacity-70 group text-shadow-hero btn-liquid"
               >
                 {isSubmitting ? (
                   <div className="h-4 w-4 rounded-full border-2 border-onyx/30 border-t-current animate-spin" />
