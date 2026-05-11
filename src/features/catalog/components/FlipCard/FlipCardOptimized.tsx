@@ -128,7 +128,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
                     {brand.activePromotions[0].title}
                   </p>
                   {brand.activePromotions[0].validUntil && (
-                    <p className="text-[9px] text-alabaster/40 uppercase tracking-widest">
+                    <p className="text-[9px] text-alabaster/40 uppercase tracking-widest" suppressHydrationWarning>
                       Válido hasta: {new Date(brand.activePromotions[0].validUntil).toLocaleDateString()}
                     </p>
                   )}

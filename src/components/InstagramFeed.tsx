@@ -38,7 +38,7 @@ export default function InstagramFeed() {
             href="https://www.instagram.com/oh_buenosaires" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="px-8 py-3 rounded-full border border-onyx/10 text-[10px] font-bold uppercase tracking-widest text-onyx hover:bg-onyx hover:text-white transition-all duration-500"
+            className="px-8 py-3 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all duration-500 btn-liquid"
           >
             Ver Perfil Completo
           </a>
@@ -64,26 +64,24 @@ export default function InstagramFeed() {
                 whileInView={{ scale: [1, 1.05, 1] }}
                 viewport={{ margin: "-20%" }}
                 transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
-                className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-[32px] overflow-hidden group/item shadow-xl relative border border-onyx/5"
+                className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-[32px] overflow-hidden group shadow-xl relative border border-onyx/5"
               >
                 <img 
                    src={img.image_url} 
                    alt="Instagram feed" 
                    referrerPolicy="no-referrer"
-                   className="w-full h-full object-cover transition-transform duration-700 md:group-hover/item:scale-110"
+                   className="w-full h-full object-cover transition-transform duration-700 md:group-hover:scale-110"
                 />
                 
-                {/* Badge - Instagram Icon with Liquid Fill */}
-                {img.type === 'reel' && (
-                  <div className="absolute top-5 right-5 bg-white/20 backdrop-blur-md p-2.5 rounded-2xl border border-white/30 shadow-lg transition-all duration-500">
-                    <InstagramIcon className="w-4 h-4 text-white" />
-                  </div>
-                )}
+                {/* Badge - Always visible Instagram Logo with brand colors */}
+                <div className="absolute top-5 right-5 bg-white/90 backdrop-blur-md p-2 rounded-xl shadow-lg z-20 group-hover:scale-110 transition-transform">
+                  <InstagramIcon className="w-4 h-4" mode="static" />
+                </div>
 
                 {/* Overlay - Visible on Hover (Desktop) or subtly on mobile when in view */}
-                <div className="absolute inset-0 bg-gradient-to-t from-onyx/60 via-transparent to-transparent opacity-0 md:group-hover/item:opacity-100 transition-opacity flex items-center justify-center pointer-events-none md:pointer-events-auto">
-                  <div className="p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 transform translate-y-4 md:group-hover/item:translate-y-0 transition-transform duration-500">
-                    <InstagramIcon className="h-8 w-8 text-white" />
+                <div className="absolute inset-0 bg-onyx/20 opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none md:pointer-events-auto">
+                  <div className="p-4 bg-white/90 rounded-full shadow-2xl transform translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
+                    <InstagramIcon className="h-8 w-8" mode="hover" />
                   </div>
                 </div>
               </motion.a>
