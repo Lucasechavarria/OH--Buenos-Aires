@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Search, MapPin, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "@/src/components/ContactSection";
+import Footer from "@/src/components/Footer";
 
 export default function MarcasPage() {
   return (
@@ -60,7 +61,7 @@ export default function MarcasPage() {
       </section>
 
       {/* Catalog Section */}
-      <div className="relative -mt-10 pb-24">
+      <div className="relative pt-12 pb-24">
         <div className="max-w-7xl mx-auto">
           <Suspense fallback={
             <div className="flex items-center justify-center py-32">
@@ -73,12 +74,7 @@ export default function MarcasPage() {
       </div>
 
       <ContactSection />
-      
-      <footer className="py-10 px-6 border-t border-onyx/5 text-center">
-        <p className="text-onyx/40 text-[9px] font-bold uppercase tracking-[0.2em]">
-          © 2026 OH! BUENOS AIRES EXPERIENCE. TODOS LOS DERECHOS RESERVADOS.
-        </p>
-      </footer>
+      <Footer />
     </main>
   );
 }

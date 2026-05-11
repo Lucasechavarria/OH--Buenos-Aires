@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Mail, Send, Phone, MapPin, AlertCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import { useSettings } from "@/src/hooks/useSettings";
@@ -92,7 +93,13 @@ export default function ContactSection() {
             <div className="flex flex-col gap-8">
               <div className="flex items-center gap-5 group">
                 <div className="h-12 w-12 rounded-full border border-celeste-oh/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
-                  <div className="absolute inset-0 bg-celeste-oh/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <motion.div 
+                    initial={{ y: "100%" }}
+                    whileInView={{ y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2 }}
+                    className="absolute inset-0 bg-celeste-oh/10" 
+                  />
                   <Phone className="h-4 w-4 text-celeste-oh relative z-10" />
                 </div>
                 <div>
@@ -103,7 +110,13 @@ export default function ContactSection() {
               
               <div className="flex items-center gap-5 group">
                 <div className="h-12 w-12 rounded-full border border-celeste-oh/20 bg-onyx overflow-hidden relative flex items-center justify-center shadow-sm">
-                  <div className="absolute inset-0 bg-celeste-oh/10 -translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  <motion.div 
+                    initial={{ y: "100%" }}
+                    whileInView={{ y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
+                    className="absolute inset-0 bg-celeste-oh/10" 
+                  />
                   <MapPin className="h-4 w-4 text-celeste-oh relative z-10" />
                 </div>
                 <div>
@@ -203,7 +216,7 @@ export default function ContactSection() {
                   <button 
                     type="submit" 
                     disabled={isSubmitting || submitted}
-                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-brand-accent text-white hover:opacity-90 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100'}`}
+                    className={`w-full h-14 text-[11px] font-bold uppercase tracking-[0.4em] flex items-center justify-center gap-3 transition-all duration-300 group/btn overflow-hidden relative shadow-lg ${submitted ? 'bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 cursor-default' : 'bg-brand-accent text-white text-shadow-hero hover:opacity-90 hover:scale-[1.02] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 btn-liquid'}`}
                   >
                     <span className="relative z-10 flex items-center gap-3">
                       {isSubmitting ? (

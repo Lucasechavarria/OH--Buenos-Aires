@@ -27,6 +27,7 @@
   );
   
   --celeste-oh: oklch(75% 0.08 210);
+  --celeste-oh-rgb: 125, 211, 247;
   --celeste-soft: oklch(94% 0.02 210);
   --glass-bg: rgba(255, 255, 255, 0.8);
   --glass-border: oklch(15% 0.01 250 / 0.1);
@@ -51,6 +52,11 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  font-weight: 600; /* Mayor grosor solicitado por el usuario para legibilidad */
   -webkit-font-smoothing: antialiased;
 }
 
@@ -91,6 +97,58 @@ h1, h2, h3, h4, .font-serif {
 
 .border-celeste-oh {
   border-color: oklch(75% 0.08 210 / 0.3);
+}
+
+.text-shadow-hero {
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8), 0 0 1px rgba(0,0,0,1);
+}
+
+.text-outline-onyx {
+  text-shadow: -0.5px -0.5px 0 #181818, 0.5px -0.5px 0 #181818, -0.5px 0.5px 0 #181818, 0.5px 0.5px 0 #181818;
+}
+
+/* Efecto de Relleno Líquido para Botones Premium */
+.btn-liquid {
+  position: relative !important;
+  overflow: hidden !important;
+  z-index: 1;
+}
+
+.btn-liquid::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  top: 110%;
+  width: 120%;
+  height: 150%;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 40%;
+  transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+  animation: liquid-rotate 10s infinite linear;
+}
+
+.btn-liquid:hover::after,
+.btn-liquid:active::after {
+  top: -20%;
+  transform: rotate(180deg);
+}
+
+/* Mobile Auto-Pulse for Premium Buttons */
+@media (hover: none) {
+  .btn-liquid::after {
+    animation: liquid-rotate 15s infinite linear, liquid-mobile-pulse 10s infinite ease-in-out;
+  }
+}
+
+@keyframes liquid-mobile-pulse {
+  0%, 100% { top: 110%; }
+  50% { top: 80%; }
+}
+
+@keyframes liquid-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* Subtle Glide Animation */

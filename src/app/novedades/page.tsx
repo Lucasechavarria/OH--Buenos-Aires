@@ -6,6 +6,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Calendar, MapPin, Clock, ArrowRight, Sparkles, Newspaper, CalendarDays, ImageIcon, X, ChevronLeft, Star, Utensils, Smartphone } from "lucide-react";
 import Link from "next/link";
 import ContactSection from "@/src/components/ContactSection";
+import Footer from "@/src/components/Footer";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 
 interface NewsItem {
@@ -162,7 +163,7 @@ export default function NovedadesPage() {
                       {new Date(item.date).toLocaleDateString('es-AR', { day: '2-digit', month: 'long', year: 'numeric' })}
                     </p>
                     <h3 className="text-2xl font-serif text-onyx mb-4 group-hover:text-celeste-oh transition-colors duration-500">{item.title}</h3>
-                    <p className="text-onyx/60 text-sm leading-relaxed mb-6 line-clamp-2">{item.excerpt}</p>
+                    <p className="text-onyx/80 text-sm leading-relaxed mb-6 line-clamp-2">{item.excerpt}</p>
                     <button className="flex items-center gap-3 text-[9px] font-bold uppercase tracking-[0.3em] text-onyx/40 group-hover:text-celeste-oh transition-all">
                       <span>Leer artículo</span>
                       <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -261,8 +262,8 @@ export default function NovedadesPage() {
                     <p className="text-alabaster/40 text-lg md:text-xl font-sans italic max-w-2xl mx-auto mb-12">
                       Contamos con espacios exclusivos y una curaduría integral para que tu marca o celebración personal sea inolvidable en el corazón de Recoleta.
                     </p>
-                    <button className="h-16 px-12 bg-white text-onyx text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:bg-celeste-oh hover:text-white hover:scale-105 transition-all duration-500 shadow-xl">
-                      Contactar al Concierge
+                    <button className="h-16 px-12 bg-brand-accent text-white text-shadow-hero btn-liquid text-[11px] font-bold uppercase tracking-[0.4em] rounded-full hover:scale-105 transition-all duration-500 shadow-xl">
+                      Contacta con nosotros
                     </button>
                  </div>
                  
@@ -341,6 +342,7 @@ export default function NovedadesPage() {
       </AnimatePresence>
 
       <ContactSection />
+      <Footer />
     </main>
   );
 }

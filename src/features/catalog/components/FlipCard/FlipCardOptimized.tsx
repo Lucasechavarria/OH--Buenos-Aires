@@ -97,7 +97,7 @@ export const FlipCardOptimized = ({ brand, priority = false, isFlipped, onFlip }
           </div>
 
           <div className="flex-none pb-2 text-center w-full border-t border-celeste-oh/10 pt-4 mt-4">
-            <p className="text-[10px] uppercase tracking-[0.4em] text-celeste-oh font-bold font-sans">
+            <p className="text-[10px] uppercase tracking-[0.4em] text-celeste-oh font-bold font-sans [text-shadow:_0_0.5px_0.5px_rgba(0,0,0,0.1)]">
               {brand.category?.name || "Local"}
             </p>
           </div>
