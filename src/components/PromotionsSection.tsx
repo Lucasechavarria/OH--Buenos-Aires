@@ -6,13 +6,24 @@ import { motion } from "framer-motion";
 import { Ticket, ExternalLink, Clock } from "lucide-react";
 import { Brand, Promotion } from "@/src/lib/domain/entities";
 import { generateCouponPDF } from "@/src/features/catalog/services/couponService";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const fetchActivePromotions = async (): Promise<Promotion[]> => {
   const response = await fetch("/api/v1/promotions/active");
   if (!response.ok) throw new Error("Failed to fetch promotions");
   return response.json();
 };
+
+function DateText({ date }: { date: string | Date }) {
+  const [formattedDate, setFormattedDate] = useState<string | null>(null);
+
+  useEffect(() => {
+    setFormattedDate(new Date(date).toLocaleDateString());
+  }, [date]);
+
+  if (!formattedDate) return <span>Vence: ...</span>;
+  return <span>Vence: {formattedDate}</span>;
+}
 
 export default function PromotionsSection() {
   const { data: promotions, isLoading } = useQuery({
@@ -118,7 +129,7 @@ export default function PromotionsSection() {
                 {promo.validUntil && (
                   <div className="flex items-center gap-2 text-[10px] text-onyx/40 font-bold uppercase tracking-widest">
                     <Clock className="w-3.5 h-3.5" />
-                    <span>Vence: {new Date(promo.validUntil).toLocaleDateString()}</span>
+                    <DateText date={promo.validUntil} />
                   </div>
                 )}
                 

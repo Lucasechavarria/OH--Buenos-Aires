@@ -112,38 +112,64 @@ h1, h2, h3, h4, .font-serif {
   position: relative !important;
   overflow: hidden !important;
   z-index: 1;
+  background: transparent !important;
+  border: 1px solid var(--brand-accent) !important;
+  color: var(--onyx) !important;
+  transition: color 0.6s cubic-bezier(0.19, 1, 0.22, 1) !important;
+}
+
+/* Background state for dark buttons if they use btn-liquid */
+.bg-onyx.btn-liquid {
+  border-color: rgba(255,255,255,0.2) !important;
+  color: white !important;
 }
 
 .btn-liquid::after {
   content: "";
   position: absolute;
   left: -10%;
-  top: 110%;
+  top: 110%; /* Start below */
   width: 120%;
-  height: 150%;
-  background: rgba(255, 255, 255, 0.2);
+  height: 140%;
+  background: var(--brand-accent);
   border-radius: 40%;
   transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
   z-index: -1;
-  animation: liquid-rotate 10s infinite linear;
+  animation: liquid-rotate 6s infinite linear;
+}
+
+.btn-liquid:hover,
+.btn-liquid:active {
+  color: white !important;
 }
 
 .btn-liquid:hover::after,
 .btn-liquid:active::after {
-  top: -20%;
+  top: -15%; /* Fill to top */
   transform: rotate(180deg);
+}
+
+/* Specific for Hero or Accent buttons where we want the reverse or specific brand colors */
+.bg-brand-accent.btn-liquid {
+  border: none !important;
+  color: white !important;
+  background: var(--brand-gradient) !important;
+}
+
+.bg-brand-accent.btn-liquid::after {
+  background: var(--onyx);
 }
 
 /* Mobile Auto-Pulse for Premium Buttons */
 @media (hover: none) {
   .btn-liquid::after {
-    animation: liquid-rotate 15s infinite linear, liquid-mobile-pulse 10s infinite ease-in-out;
+    animation: liquid-rotate 10s infinite linear, liquid-mobile-pulse 12s infinite ease-in-out;
   }
 }
 
 @keyframes liquid-mobile-pulse {
-  0%, 100% { top: 110%; }
-  50% { top: 80%; }
+  0%, 10%, 90%, 100% { top: 110%; }
+  40%, 60% { top: -10%; }
 }
 
 @keyframes liquid-rotate {
