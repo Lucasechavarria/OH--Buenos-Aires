@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Mail, Send, Phone, MapPin, AlertCircle, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/src/lib/infrastructure/supabase-client";
 import { useSettings } from "@/src/hooks/useSettings";
