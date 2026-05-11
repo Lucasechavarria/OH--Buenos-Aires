@@ -60,13 +60,17 @@ export default function InstagramFeed() {
                 href={img.link_url || "https://www.instagram.com/oh_buenosaires"}
                 target="_blank"
                 rel="noopener noreferrer"
+                initial={{ scale: 1 }}
+                whileInView={{ scale: [1, 1.05, 1] }}
+                viewport={{ margin: "-20%" }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut" }}
                 className="flex-shrink-0 w-64 md:w-72 aspect-square rounded-[32px] overflow-hidden group/item shadow-xl relative border border-onyx/5"
               >
                 <img 
-                  src={img.image_url} 
-                  alt="Instagram feed" 
-                  referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-110"
+                   src={img.image_url} 
+                   alt="Instagram feed" 
+                   referrerPolicy="no-referrer"
+                   className="w-full h-full object-cover transition-transform duration-700 md:group-hover/item:scale-110"
                 />
                 
                 {/* Badge - Instagram Icon with Liquid Fill */}
@@ -76,9 +80,9 @@ export default function InstagramFeed() {
                   </div>
                 )}
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-onyx/60 via-transparent to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity flex items-center justify-center">
-                  <div className="p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 transform translate-y-4 group-hover/item:translate-y-0 transition-transform duration-500">
+                {/* Overlay - Visible on Hover (Desktop) or subtly on mobile when in view */}
+                <div className="absolute inset-0 bg-gradient-to-t from-onyx/60 via-transparent to-transparent opacity-0 md:group-hover/item:opacity-100 transition-opacity flex items-center justify-center pointer-events-none md:pointer-events-auto">
+                  <div className="p-4 bg-white/10 backdrop-blur-md rounded-full border border-white/20 transform translate-y-4 md:group-hover/item:translate-y-0 transition-transform duration-500">
                     <InstagramIcon className="h-8 w-8 text-white" />
                   </div>
                 </div>
@@ -103,7 +107,9 @@ export default function InstagramFeed() {
             width: max-content;
             animation: marquee 40s linear infinite;
           }
-          .group-hover\:pause:hover {
+          
+          .group-hover\:pause:hover,
+          .group-hover\:pause:active {
             animation-play-state: paused;
           }
         `}</style>

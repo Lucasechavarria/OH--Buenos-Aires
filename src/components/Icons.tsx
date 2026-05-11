@@ -51,8 +51,31 @@ export const InstagramIcon = ({ className }: { className?: string }) => (
         animation: insta-wave 2s infinite linear;
         display: none;
       }
-      .group-hover\/insta .animate-insta-wave {
+      .group-hover\/insta .animate-insta-wave,
+      .animate-insta-active .animate-insta-wave {
         display: block;
+      }
+
+      /* Mobile Auto-Animation Cycle */
+      @media (hover: none) {
+        .group-hover\/insta .translate-y-full,
+        .animate-insta-active .translate-y-full {
+          animation: mobile-insta-fill 8s infinite ease-in-out;
+        }
+        .group-hover\/insta .animate-insta-wave,
+        .animate-insta-active .animate-insta-wave {
+          animation: insta-wave 2s infinite linear, mobile-insta-wave-opacity 8s infinite ease-in-out;
+        }
+      }
+
+      @keyframes mobile-insta-fill {
+        0%, 10%, 90%, 100% { transform: translateY(100%); }
+        30%, 70% { transform: translateY(0%); }
+      }
+
+      @keyframes mobile-insta-wave-opacity {
+        0%, 15%, 85%, 100% { opacity: 0; display: none; }
+        30%, 70% { opacity: 1; display: block; }
       }
     `}</style>
   </div>

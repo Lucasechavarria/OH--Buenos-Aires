@@ -53,8 +53,20 @@ export default function BannersSlider() {
               <img 
                 src={banner.image_url} 
                 alt={banner.title} 
-                className="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105" 
+                className="w-full h-full object-cover object-center transition-transform duration-[3s] ease-out md:group-hover:scale-110" 
+                style={{ 
+                  animation: 'mobile-slow-zoom 20s infinite alternate ease-in-out' 
+                }}
               />
+              <style jsx>{`
+                @media (min-width: 768px) {
+                  img { animation: none !important; }
+                }
+                @keyframes mobile-slow-zoom {
+                  from { transform: scale(1); }
+                  to { transform: scale(1.1); }
+                }
+              `}</style>
               <div className="absolute inset-0 bg-gradient-to-t from-onyx via-onyx/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-700" />
               
               <div className="absolute bottom-6 left-6 right-6">

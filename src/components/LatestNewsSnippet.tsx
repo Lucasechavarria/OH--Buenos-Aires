@@ -43,7 +43,7 @@ export default function LatestNewsSnippet() {
                      <span>{news.date}</span>
                   </div>
                   <h3 className="text-2xl font-serif mb-4 group-hover:text-celeste-oh transition-colors">{news.title}</h3>
-                  <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
                      Continuar leyendo
                      <ArrowRight className="w-3 h-3" />
                   </div>
